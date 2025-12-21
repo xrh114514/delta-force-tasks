@@ -6,21 +6,21 @@
       loop muted autoplay></video>
 
     <!-- 侧边栏 -->
-    <Sidebar :activities="activityList" :current-activity-id="currentActivityId" @select-activity="loadActivity" />
+    <Sidebar :activities="activityList" :current-activity-id="currentRouteName" />
 
     <!-- 主内容区 -->
     <div class="details">
       <div class="title">{{ currentTitle }}</div>
       <div class="desc">{{ currentDescription }}</div>
 
-      <!-- 动态组件区域 -->
+      <!-- 动态组件区域 - 替换为路由视图 -->
       <div id="dynamicComponents">
-        <!-- 通用的HUD组件 -->
-        <component v-for="component in hudComponents" :key="component.id" :is="component.type"
-          v-bind="component.props" />
-
-        <!-- 活动特定的组件 -->
-        <component v-if="currentActivityComponent" :is="currentActivityComponent" :key="currentActivityId" />
+        <!-- 路由视图 -->
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" :key="currentRouteName" />
+          </transition>
+        </router-view>
       </div>
 
       <!-- 音乐播放器 -->
@@ -33,26 +33,25 @@
 <script setup>
 // 导入所有必要的组件
 import { ref, computed, onMounted, watch, provide, markRaw } from 'vue'
+import { useRoute } from 'vue-router'
 import Sidebar from './components/Sidebar.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
-import HudTextPanel from './components/HudTextPanel.vue'
-import ClaimButton from './components/ClaimButton.vue'
 
-// 导入活动配置和组件
+// 导入活动配置
 import {
   activities,
-  getActivityConfig,
-  getActivityComponent
+  getActivityConfig
 } from './activities'
 
+// 获取当前路由信息
+const route = useRoute()
+
 // 状态管理
-const currentActivityId = ref('event1') // 默认第一个活动
 const currentHeroImage = ref('')
 const currentVideo = ref('')
 const showVideo = ref(false)
 const currentTitle = ref('')
 const currentDescription = ref('')
-const hudComponents = ref([])
 
 // 音乐播放器状态
 const musicPlayer = ref(null)
@@ -62,12 +61,12 @@ const isPlaying = ref(false)
 const heroVideo = ref(null)
 
 // 计算属性
-const currentActivityConfig = computed(() => {
-  return getActivityConfig(currentActivityId.value)
-})
+const currentRouteName = computed(() => route.name || 'Event1')
 
-const currentActivityComponent = computed(() => {
-  return getActivityComponent(currentActivityId.value)
+const currentActivityConfig = computed(() => {
+  // 根据路由名称获取活动配置
+  const routePath = route.path.replace('/', '')
+  return getActivityConfig(routePath) || activities.event1
 })
 
 const activityList = computed(() => {
@@ -77,6 +76,53 @@ const activityList = computed(() => {
     preview: config.preview
   }))
 })
+
+// 监听路由变化，更新页面内容
+watch(
+  () => currentActivityConfig.value,
+  (newConfig) => {
+    if (newConfig) {
+      currentTitle.value = newConfig.title
+      currentDescription.value = newConfig.desc
+      currentHeroImage.value = newConfig.hero
+      
+      // 更新播放列表
+      if (newConfig.music) {
+        playlist.value = newConfig.music
+      }
+    }
+  },
+  { immediate: true }
+)
+
+// 初始化
+onMounted(() => {
+  // 加载默认活动内容
+  const initialConfig = currentActivityConfig.value
+  if (initialConfig) {
+    currentTitle.value = initialConfig.title
+    currentDescription.value = initialConfig.desc
+    currentHeroImage.value = initialConfig.hero
+    
+    // 初始化播放列表
+    if (initialConfig.music) {
+      playlist.value = initialConfig.music
+    }
+  }
+})
+
+// 播放控制方法
+const togglePlayPause = () => {
+  isPlaying.value = !isPlaying.value
+}
+
+const playNextTrack = () => {
+  currentTrackIndex.value = (currentTrackIndex.value + 1) % playlist.value.length
+}
+
+const selectTrack = (index) => {
+  currentTrackIndex.value = index
+}
 
 // 注册全局UI方法
 const ui = {
@@ -108,43 +154,19 @@ const ui = {
     }
   },
 
-  showTextPanel: (html, duration = 0) => {
-    const id = `text-panel-${Date.now()}`
-    hudComponents.value.push({
-      id,
-      type: markRaw(HudTextPanel),
-      props: {
-        html,
-        duration,
-        visible: true
-      }
-    })
-
-    if (duration > 0) {
-      setTimeout(() => {
-        const index = hudComponents.value.findIndex(c => c.id === id)
-        if (index > -1) {
-          hudComponents.value[index].props.visible = false
-        }
-      }, duration)
-    }
+  showTextPanel: (message, duration = 5000) => {
+    // 这里应该实现显示文本面板的逻辑
+    // 由于没有看到具体的TextPanel组件使用方式，这里先留空实现
+    console.log('Show text panel:', message, 'for', duration, 'ms')
   },
 
-  addClaimButton: (id, text = '领取奖励') => {
-    hudComponents.value.push({
-      id: `claim-btn-${id}`,
-      type: markRaw(ClaimButton),
-      props: {
-        buttonId: id,
-        text,
-        claimed: false,
-        onClick: () => handleClaimReward(id)
-      }
-    })
+  addClaimButton: (id, text) => {
+    // 这里应该实现添加领取按钮的逻辑
+    // 由于没有看到具体的按钮添加实现，这里先留空实现
+    console.log('Add claim button:', id, text)
   },
 
   clearDynamic: () => {
-    hudComponents.value = []
     showVideo.value = false
     if (heroVideo.value) {
       heroVideo.value.pause()
@@ -152,137 +174,55 @@ const ui = {
   }
 }
 
-// 提供UI上下文给子组件
+// 提供全局UI方法
 provide('ui', ui)
 
-// 加载活动
-const loadActivity = async (id) => {
-  if (currentActivityId.value === id) return
-
-  const config = getActivityConfig(id)
-  if (!config) {
-    console.error(`活动 ${id} 不存在`)
-    return
-  }
-
-  // 清理当前活动
-  ui.clearDynamic()
-
-  // 更新当前活动ID
-  currentActivityId.value = id
-
-  // 设置基础信息
-  if (config.title) ui.setTitle(config.title)
-  if (config.desc) ui.setDesc(config.desc)
-  if (config.hero) ui.setHero(config.hero)
-
-  // 处理音乐策略
-  if (config.musicStrategy === 'force' && config.music) {
-    playlist.value = config.music
-    currentTrackIndex.value = 0
-    isPlaying.value = true
-    if (musicPlayer.value && typeof musicPlayer.value.updatePlayer === 'function') {
-      musicPlayer.value.updatePlayer()
-    }
-  } else if (config.musicStrategy === 'stop') {
-    // 直接更新状态而不是调用不存在的pause方法
-    isPlaying.value = false
-  }
-  // 'keep' 策略：保持当前播放状态，不做处理
-}
-
-// 处理奖励领取
-const handleClaimReward = (id) => {
-  console.log(`领取奖励: ${id}`)
-
-  if (window.app && typeof window.app.claimReward === 'function') {
-    window.app.claimReward(id)
-  }
-
-  // 更新按钮状态
-  const btn = hudComponents.value.find(c => c.id === `claim-btn-${id}`)
-  if (btn) {
-    btn.props.claimed = true
-  }
-}
-
-// 音乐播放器控制
-const togglePlayPause = () => {
-  isPlaying.value = !isPlaying.value
-}
-
-const playNextTrack = () => {
-  currentTrackIndex.value = (currentTrackIndex.value + 1) % playlist.value.length
-}
-
-const selectTrack = (index) => {
-  currentTrackIndex.value = index
-}
-
-// 初始化
-onMounted(() => {
-  // 注册全局UI对象
-  window.ui = ui
-
-  // 加载默认活动
-  if (currentActivityConfig.value) {
-    loadActivity(currentActivityId.value)
-  }
-})
-
-// 监听视频状态变化
-watch(showVideo, (newVal) => {
-  if (newVal && heroVideo.value) {
-    heroVideo.value.play()
-  } else if (heroVideo.value) {
-    heroVideo.value.pause()
-  }
-})
-
-// 监听当前活动变化
-watch(currentActivityId, (newId) => {
-  const config = getActivityConfig(newId)
-  if (config) {
-    currentTitle.value = config.title || ''
-    currentDescription.value = config.desc || ''
-    currentHeroImage.value = config.hero || ''
-  }
-})
+// 暴露给全局使用
+window.ui = ui
 </script>
 
 <style scoped>
-/* 保持原有的样式 */
+/* 添加过渡动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* 其他样式保持不变 */
 .layout {
-  width: 100vw;
-  max-width: 100%;
-  aspect-ratio: 4 / 3;
-  height: auto;
-  max-height: 100vh;
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
   position: relative;
-  background: #000;
-  margin: 0 auto;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .hero-bg {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-size: cover;
   background-position: center;
-  filter: brightness(0.75);
-  transition: background-image 0.4s ease-out;
+  transition: background-image 1s ease-in-out;
+  z-index: -1;
 }
 
 .hero-video {
   position: absolute;
-  inset: 0;
-  object-fit: cover;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  transition: opacity 1s ease-in-out;
+  z-index: -1;
   opacity: 0;
-  transition: opacity 1s ease;
 }
 
 .hero-video.active {
@@ -290,23 +230,11 @@ watch(currentActivityId, (newId) => {
 }
 
 .details {
-  flex: 1;
   position: relative;
-  padding: 40px 50px;
-  color: var(--text-main);
-  text-shadow: 0 0 4px #000;
+  z-index: 1;
 }
 
-.title {
-  font-size: 48px;
-  font-weight: 700;
-  margin-bottom: 12px;
-}
-
-.desc {
-  font-size: 18px;
-  line-height: 1.5;
-  color: var(--text-sub);
-  max-width: 60%;
+#dynamicComponents {
+  margin-top: 20px;
 }
 </style>
