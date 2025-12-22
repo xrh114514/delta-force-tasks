@@ -61,34 +61,6 @@ export const activities = {
     }
 }
 
-// 导出路由配置
-export const eventRoutes = [
-  {
-    path: '/event1',
-    name: 'Event1',
-    component: Event1,
-    meta: { title: '突击行动' }
-  },
-  {
-    path: '/event2',
-    name: 'Event2',
-    component: Event2,
-    meta: { title: '生存挑战' }
-  },
-  {
-    path: '/event3',
-    name: 'Event3',
-    component: Event3,
-    meta: { title: '特别活动' }
-  },
-  {
-    path: '/event4',
-    name: 'Event4',
-    component: Event4,
-    meta: { title: '测试活动' }
-  }
-]
-
 // 按需获取活动配置
 export const getActivityConfig = (id) => {
     return activities[id] || null
