@@ -46,7 +46,6 @@ const buttonStyle = computed(() => {
 const handleClick = () => {
     if (!props.claimed) {
         emit('claim', props.buttonId)
-        props.onClick(props.buttonId)
     }
 }
 </script>
@@ -65,6 +64,24 @@ const handleClick = () => {
     border-radius: 4px;
     transition: all 0.3s;
     z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .claim-btn {
+        right: 280px;
+        padding: 10px 24px;
+        font-size: 16px;
+        bottom: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .claim-btn {
+        right: 220px;
+        padding: 8px 20px;
+        font-size: 14px;
+        bottom: 60px;
+    }
 }
 
 .claim-btn:hover:not(.claimed) {

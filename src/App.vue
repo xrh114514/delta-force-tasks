@@ -10,18 +10,20 @@
 
     <!-- 主内容区 -->
     <div class="details">
-      <div class="title">{{ currentTitle }}</div>
-      <div class="desc">{{ currentDescription }}</div>
+        <div class="title" :key="`title-${currentActivityId}`">{{ currentTitle }}</div>
+        <div class="desc" :key="`desc-${currentActivityId}`">{{ currentDescription }}</div>
 
-      <!-- 动态组件区域 -->
-      <div id="dynamicComponents">
-        <!-- 通用的HUD组件 -->
-        <component v-for="component in hudComponents" :key="component.id" :is="component.type"
-          v-bind="component.props" />
+        <!-- 动态组件区域 -->
+        <div id="dynamicComponents">
+          <!-- 通用的HUD组件 -->
+          <component v-for="component in hudComponents" :key="component.id" :is="component.type"
+            v-bind="component.props" @claim="handleClaimReward" />
 
-        <!-- 活动特定的组件 -->
-        <component v-if="currentActivityComponent" :is="currentActivityComponent" :key="currentActivityId" />
-      </div>
+          <!-- 活动特定的组件 -->
+          <transition name="activity-fade" mode="out-in">
+            <component v-if="currentActivityComponent" :is="currentActivityComponent" :key="currentActivityId" />
+          </transition>
+        </div>
 
       <!-- 音乐播放器 -->
       <MusicPlayer ref="musicPlayer" :playlist="playlist" :current-track-index="currentTrackIndex"
@@ -35,8 +37,8 @@
 import { ref, computed, onMounted, watch, provide, markRaw } from 'vue'
 import Sidebar from './components/Sidebar.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
-import HudTextPanel from './components/HudTextPanel.vue'
 import ClaimButton from './components/ClaimButton.vue'
+import { ElNotification } from 'element-plus'
 
 // 导入活动配置和组件
 import {
@@ -108,37 +110,30 @@ const ui = {
     }
   },
 
-  showTextPanel: (html, duration = 0) => {
-    const id = `text-panel-${Date.now()}`
-    hudComponents.value.push({
-      id,
-      type: markRaw(HudTextPanel),
-      props: {
-        html,
-        duration,
-        visible: true
-      }
+  showTextPanel: (html, duration = 5000) => {
+    ElNotification({
+      message: html,
+      position: 'bottom-left',
+      duration: duration > 0 ? duration : 5000,
+      dangerouslyUseHTMLString: true,
+      customClass: 'hud-notification',
+      showClose: false
     })
-
-    if (duration > 0) {
-      setTimeout(() => {
-        const index = hudComponents.value.findIndex(c => c.id === id)
-        if (index > -1) {
-          hudComponents.value[index].props.visible = false
-        }
-      }, duration)
-    }
   },
 
   addClaimButton: (id, text = '领取奖励') => {
+    const existingBtn = hudComponents.value.find(c => c.id === `claim-btn-${id}`)
+    if (existingBtn) {
+      console.warn(`按钮 ${id} 已存在，跳过添加`)
+      return
+    }
     hudComponents.value.push({
       id: `claim-btn-${id}`,
       type: markRaw(ClaimButton),
       props: {
         buttonId: id,
         text,
-        claimed: false,
-        onClick: () => handleClaimReward(id)
+        claimed: false
       }
     })
   },
@@ -185,8 +180,10 @@ const loadActivity = async (id) => {
       musicPlayer.value.updatePlayer()
     }
   } else if (config.musicStrategy === 'stop') {
-    // 直接更新状态而不是调用不存在的pause方法
     isPlaying.value = false
+    if (musicPlayer.value && typeof musicPlayer.value.updatePlayer === 'function') {
+      musicPlayer.value.updatePlayer()
+    }
   }
   // 'keep' 策略：保持当前播放状态，不做处理
 }
@@ -199,10 +196,10 @@ const handleClaimReward = (id) => {
     window.app.claimReward(id)
   }
 
-  // 更新按钮状态
-  const btn = hudComponents.value.find(c => c.id === `claim-btn-${id}`)
-  if (btn) {
-    btn.props.claimed = true
+  // 安全地更新按钮状态
+  const btnIndex = hudComponents.value.findIndex(c => c.id === `claim-btn-${id}`)
+  if (btnIndex > -1) {
+    hudComponents.value[btnIndex].props.claimed = true
   }
 }
 
@@ -238,26 +235,13 @@ watch(showVideo, (newVal) => {
     heroVideo.value.pause()
   }
 })
-
-// 监听当前活动变化
-watch(currentActivityId, (newId) => {
-  const config = getActivityConfig(newId)
-  if (config) {
-    currentTitle.value = config.title || ''
-    currentDescription.value = config.desc || ''
-    currentHeroImage.value = config.hero || ''
-  }
-})
 </script>
 
 <style scoped>
-/* 保持原有的样式 */
+/* 响应式布局样式 */
 .layout {
   width: 100vw;
-  max-width: 100%;
-  aspect-ratio: 4 / 3;
-  height: auto;
-  max-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: row;
   overflow: hidden;
@@ -297,10 +281,34 @@ watch(currentActivityId, (newId) => {
   text-shadow: 0 0 4px #000;
 }
 
+@media (max-width: 768px) {
+  .details {
+    padding: 20px 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .details {
+    padding: 15px 20px;
+  }
+}
+
 .title {
   font-size: 48px;
   font-weight: 700;
   margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 28px;
+  }
 }
 
 .desc {
@@ -308,5 +316,40 @@ watch(currentActivityId, (newId) => {
   line-height: 1.5;
   color: var(--text-sub);
   max-width: 60%;
+}
+
+@media (max-width: 768px) {
+  .desc {
+    font-size: 16px;
+    max-width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .desc {
+    font-size: 14px;
+    max-width: 100%;
+  }
+}
+
+/* 活动切换过渡动画 */
+.activity-fade-enter-active,
+.activity-fade-leave-active {
+  transition: all 0.3s ease;
+}
+
+.activity-fade-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.activity-fade-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.title,
+.desc {
+  transition: all 0.3s ease;
 }
 </style>

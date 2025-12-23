@@ -11,6 +11,19 @@
     --sidebar-width: 220px;
 }
 
+/* 响应式设计 */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 180px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --sidebar-width: 150px;
+    }
+}
+
 body {
     margin: 0;
     padding: 0;

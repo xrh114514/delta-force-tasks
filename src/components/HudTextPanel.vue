@@ -32,6 +32,26 @@ defineProps({
     transition: opacity 0.8s;
 }
 
+@media (max-width: 768px) {
+    .hud-text-panel {
+        left: 25px;
+        max-width: 70vw;
+        padding: 15px;
+        font-size: 14px;
+        bottom: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hud-text-panel {
+        left: 20px;
+        max-width: 80vw;
+        padding: 12px;
+        font-size: 12px;
+        bottom: 60px;
+    }
+}
+
 .hud-text-panel.visible {
     opacity: 1;
 }

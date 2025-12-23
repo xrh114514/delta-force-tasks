@@ -64,16 +64,12 @@ const selectTrack = (index) => {
 // 暴露方法给父组件
 defineExpose({
   updatePlayer() {
-    // 当父组件状态更新时，确保播放器UI与状态同步
-    console.log('播放器更新已触发')
-    // 如果isPlaying为true但实际没播放，则触发播放
-    if (props.isPlaying && !isPlaying.value) {
-      togglePlayPause()
-    }
-    // 如果isPlaying为false但实际在播放，则触发暂停
-    else if (!props.isPlaying && isPlaying.value) {
-      togglePlayPause()
-    }
+    // 这个方法现在只是用于调试，不再尝试修改props
+    console.log('播放器状态已同步:', {
+      isPlaying: props.isPlaying,
+      currentTrack: currentTrack.value?.title,
+      trackIndex: props.currentTrackIndex
+    })
   }
 })
 </script>
@@ -95,6 +91,24 @@ defineExpose({
     justify-content: space-between;
     z-index: 10;
     gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .music-player {
+        width: 250px;
+        right: 15px;
+        bottom: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .music-player {
+        width: 200px;
+        right: 10px;
+        bottom: 10px;
+        padding: 6px;
+        gap: 5px;
+    }
 }
 
 .player-disc {
