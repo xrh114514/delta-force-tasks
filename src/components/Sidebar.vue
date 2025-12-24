@@ -4,7 +4,7 @@
         <div v-for="activity in activities" :key="activity.id" class="sidebar-item"
             :class="{ active: activity.id === currentActivityId }" :style="{
                 backgroundImage: activity.preview ? `url('${activity.preview}')` : 'none'
-            }" @click="$emit('select-activity', activity.id)">
+            }" @click="handleSidebarClick(activity.id)">
             <span class="sidebar-item-name">{{ activity.name }}</span>
         </div>
 
@@ -22,6 +22,8 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const props = defineProps({
     activities: {
@@ -129,6 +131,10 @@ const switchToNextActivity = () => {
         const nextActivity = props.activities[currentIndex + 1]
         emit('select-activity', nextActivity.id)
     }
+}
+
+const handleSidebarClick = (id) => {
+  router.push({ name: 'Event', params: { id } })
 }
 </script>
 

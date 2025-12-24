@@ -35,6 +35,7 @@
 <script setup>
 // 导入所有必要的组件
 import { ref, computed, onMounted, watch, provide, markRaw } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import Sidebar from './components/Sidebar.vue'
 import MusicPlayer from './components/MusicPlayer.vue'
 import ClaimButton from './components/ClaimButton.vue'
@@ -48,7 +49,7 @@ import {
 } from './activities'
 
 // 状态管理
-const currentActivityId = ref('event1') // 默认第一个活动
+const currentActivityId = computed(() => route.params.id || 'event1')
 const currentHeroImage = ref('')
 const currentVideo = ref('')
 const showVideo = ref(false)
@@ -152,25 +153,16 @@ provide('ui', ui)
 
 // 加载活动
 const loadActivity = async (id) => {
-  if (currentActivityId.value === id) return
-
   const config = getActivityConfig(id)
   if (!config) {
     console.error(`活动 ${id} 不存在`)
     return
   }
-
-  // 清理当前活动
   ui.clearDynamic()
-
-  // 更新当前活动ID
-  currentActivityId.value = id
-
   // 设置基础信息
   if (config.title) ui.setTitle(config.title)
   if (config.desc) ui.setDesc(config.desc)
   if (config.hero) ui.setHero(config.hero)
-
   // 处理音乐策略
   if (config.musicStrategy === 'force' && config.music) {
     playlist.value = config.music
@@ -185,7 +177,6 @@ const loadActivity = async (id) => {
       musicPlayer.value.updatePlayer()
     }
   }
-  // 'keep' 策略：保持当前播放状态，不做处理
 }
 
 // 处理奖励领取
@@ -218,12 +209,14 @@ const selectTrack = (index) => {
 
 // 初始化
 onMounted(() => {
-  // 注册全局UI对象
   window.ui = ui
-
-  // 加载默认活动
-  if (currentActivityConfig.value) {
+  if (currentActivityId.value) {
     loadActivity(currentActivityId.value)
+  }
+})
+watch(() => route.params.id, (newId) => {
+  if (newId) {
+    loadActivity(newId)
   }
 })
 
