@@ -3,9 +3,6 @@
   "compatibility_date": "2025-12-24",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": {
-      "rewrite_to": "/index.html",
-      "enable_404_pages": false
-    }
+    "not_found_handling": "single-page-application" 
   }
 }
