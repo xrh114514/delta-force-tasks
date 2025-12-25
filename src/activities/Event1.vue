@@ -82,6 +82,7 @@ const claimedRewards = ref([])
 
 const showClaimDialog = ref(false)
 const pendingRewardId = ref(null)
+const isConfirmed = ref(false)
 
 // 选择图片
 const selectImage = (image) => {
@@ -97,8 +98,12 @@ const claimReward = (rewardId) => {
             image: selectedImage.value,
             timestamp: new Date()
         })
+        rewardImages.value.splice(rewardImages.value.indexOf(selectedImage.value), 1)
         ui.showTextPanel(`🎉 成功领取奖励: ${selectedImage.value.alt}!`, 5000)
         selectedImage.value = null
+        // 保存到localStorage
+        localStorage.setItem('Event1_claimedRewards', JSON.stringify(claimedRewards.value))
+        localStorage.setItem('Event1_lastClaimTime', new Date().toISOString())
     } else {
         ui.showTextPanel('请先选择要领取的奖励！', 3000)
     }
@@ -114,7 +119,9 @@ const onClaimBtnClick = (rewardId) => {
     showClaimDialog.value = true
     return new Promise((resolve) => {
         watch(showClaimDialog, (newVal) => {
-            resolve(!newVal)
+            resolve(isConfirmed.value)
+        }, {
+            once: true
         })
     })
 }
@@ -124,11 +131,33 @@ const confirmClaim = () => {
     claimReward(pendingRewardId.value)
     showClaimDialog.value = false
     pendingRewardId.value = null
+    isConfirmed.value = true
 }
 
 // 初始化活动
 onMounted(() => {
     ui.showTextPanel('欢迎来到突击行动！请先选择奖励，然后点击领取按钮。', 8000)
+    
+    // 检查是否需要重置奖励（每天0点）
+    const today = new Date().toDateString()
+    const lastResetDate = localStorage.getItem('Event1_lastResetDate')
+    if (lastResetDate !== today) {
+        // 重置奖励
+        claimedRewards.value = []
+        localStorage.setItem('Event1_lastResetDate', today)
+        localStorage.removeItem('Event1_claimedRewards')
+    } else {
+        // 加载已领取奖励
+        const stored = localStorage.getItem('Event1_claimedRewards')
+        if (stored) {
+            claimedRewards.value = JSON.parse(stored)
+            // 从奖励列表中移除已领取的
+            claimedRewards.value.forEach(claimed => {
+                const index = rewardImages.value.findIndex(img => img.src === claimed.image.src)
+                if (index !== -1) rewardImages.value.splice(index, 1)
+            })
+        }
+    }
     
     // 设置全局奖励领取方法
     window.app = {
@@ -139,11 +168,9 @@ onMounted(() => {
 // 监听选择奖励的变化，动态显示/隐藏按钮
 watch(selectedImage, (newVal) => {
     if (newVal) {
-        ui.addClaimButton('daily1', '领取每日奖励')
-        ui.addClaimButton('weekly1', '领取周常奖励')
+        ui.addClaimButton('reward', '领取奖励')
     } else {
-        ui.removeClaimButton('daily1')
-        ui.removeClaimButton('weekly1')
+        ui.removeClaimButton('reward')
     }
 })
 
