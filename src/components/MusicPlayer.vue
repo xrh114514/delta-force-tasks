@@ -88,17 +88,6 @@
                 ⏭
             </el-button>
             
-            <!-- 循环模式按钮 -->
-            <el-button 
-                class="control-btn"
-                @click="toggleLoopMode"
-                circle
-                size="small"
-                :title="['顺序播放', '随机播放', '单曲循环', '列表循环'][loopMode]"
-            >
-                {{ getLoopModeIcon() }}
-            </el-button>
-            
             <!-- 菜单 - 使用Element Plus Dropdown -->
             <el-dropdown @command="selectTrack">
                 <el-button 
@@ -122,7 +111,7 @@
             </el-dropdown>
         </div>
 
-        <audio ref="audioElement" v-show="false" @timeupdate="updateProgress" @loadedmetadata="updateDuration" @ended="handlePlayEnded"></audio>
+        <audio ref="audioElement" v-show="false" @timeupdate="updateProgress" @loadedmetadata="updateDuration"></audio>
     </div>
 </template>
 
@@ -150,14 +139,6 @@ const emit = defineEmits(['play-pause', 'next-track', 'prev-track', 'select-trac
 const showMenu = ref(false)
 const audioElement = ref(null)
 
-// 循环模式常量定义
-const LOOP_MODES = {
-    SEQUENCE: 0,      // 顺序播放
-    RANDOM: 1,        // 随机播放
-    SINGLE: 2,        // 单曲循环
-    LIST_LOOP: 3      // 列表循环
-}
-
 // 状态变量
 const currentTime = ref(0)
 const duration = ref(0)
@@ -165,8 +146,6 @@ const volume = ref(70)
 const isMuted = ref(false)
 const lastVolume = ref(70)
 const progressBar = ref(0) // 使用单一状态变量控制进度条
-const loopMode = ref(LOOP_MODES.LIST_LOOP) // 默认列表循环
-const randomHistory = ref([]) // 随机播放历史记录
 
 const currentTrack = computed(() => {
     return props.playlist[props.currentTrackIndex] || null
@@ -232,97 +211,6 @@ const seekProgress = () => {
         const newTime = progressBar.value
         currentTime.value = newTime
         audioElement.value.currentTime = newTime
-    }
-}
-
-// 切换循环模式
-const toggleLoopMode = () => {
-    // 按照 SEQUENCE -> RANDOM -> SINGLE -> LIST_LOOP 的顺序循环切换
-    loopMode.value = (loopMode.value + 1) % 4
-    console.log('当前循环模式:', loopMode.value)
-}
-
-// 获取循环模式图标
-const getLoopModeIcon = () => {
-    switch (loopMode.value) {
-        case LOOP_MODES.SEQUENCE:
-            return '➡️'
-        case LOOP_MODES.RANDOM:
-            return '🔀'
-        case LOOP_MODES.SINGLE:
-            return '🔂'
-        case LOOP_MODES.LIST_LOOP:
-            return '🔁'
-        default:
-            return '🔁'
-    }
-}
-
-// 获取下一首曲目索引
-const getNextTrackIndex = () => {
-    const totalTracks = props.playlist.length
-    if (totalTracks <= 1) return 0
-    
-    switch (loopMode.value) {
-        case LOOP_MODES.RANDOM:
-            // 随机播放：生成除当前索引外的随机索引，并记录历史
-            let availableIndices = Array.from({ length: totalTracks }, (_, i) => i)
-            availableIndices = availableIndices.filter(index => index !== props.currentTrackIndex)
-            
-            // 如果只剩一首歌了，则返回当前索引
-            if (availableIndices.length === 0) return props.currentTrackIndex
-            
-            // 随机选择一个索引
-            const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)]
-            randomHistory.value.push(props.currentTrackIndex)
-            return randomIndex
-            
-        case LOOP_MODES.SINGLE:
-            // 单曲循环：始终返回当前索引
-            return props.currentTrackIndex
-            
-        case LOOP_MODES.SEQUENCE:
-            // 顺序播放：如果是最后一首，则返回-1表示结束
-            return props.currentTrackIndex === totalTracks - 1 ? -1 : props.currentTrackIndex + 1
-            
-        case LOOP_MODES.LIST_LOOP:
-        default:
-            // 列表循环：循环到第一首
-            return (props.currentTrackIndex + 1) % totalTracks
-    }
-}
-
-// 处理播放结束事件
-const handlePlayEnded = () => {
-    console.log('播放结束，当前模式:', loopMode.value, '模式名称:', ['顺序播放', '随机播放', '单曲循环', '列表循环'][loopMode.value])
-    console.log('当前曲目索引:', props.currentTrackIndex, '总曲目数:', props.playlist.length)
-    
-    // 如果是单曲循环模式，重新播放当前歌曲
-    if (loopMode.value === LOOP_MODES.SINGLE && audioElement.value) {
-        console.log('单曲循环模式：重新播放当前歌曲')
-        audioElement.value.currentTime = 0
-        if (props.isPlaying) {
-            audioElement.value.play().catch(err => {
-                console.error('重新播放失败:', err)
-            })
-        }
-        return
-    }
-    
-    // 获取下一首索引
-    const nextIndex = getNextTrackIndex()
-    console.log('计算的下一首索引:', nextIndex)
-    
-    if (nextIndex === -1) {
-        // 顺序播放模式下的最后一首播放完毕，暂停播放
-        console.log('顺序播放模式：已播放到最后一首，暂停播放')
-        emit('play-pause') // 触发暂停事件
-    } else if (nextIndex !== props.currentTrackIndex) {
-        // 切换到下一首
-        console.log(`切换到下一首：索引 ${nextIndex}`)
-        emit('select-track', nextIndex)
-    } else {
-        console.log('没有需要切换的下一首曲目')
     }
 }
 
@@ -714,39 +602,4 @@ defineExpose({
         width: 70px;
     }
 }
-<!-- 播放器控制按钮组 -->
-									<div class="controls">
-										<el-button 
-											class="control-btn prev-btn" 
-											@click="emit('prev-track')"
-											size="large"
-											:icon="'el-icon-back'"
-										>
-										</el-button>
-										
-										<el-button
-											class="control-btn play-btn"
-											@click="emit('play-pause')"
-											size="large"
-											:icon="isPlaying ? 'el-icon-pause' : 'el-icon-video-play'"
-										>
-										</el-button>
-										
-										<el-button
-											class="control-btn next-btn"
-											@click="emit('next-track')"
-											size="large"
-											:icon="'el-icon-right'"
-										>
-										</el-button>
-										
-										<el-button
-											class="control-btn loop-btn"
-											@click="toggleLoopMode"
-											size="large"
-											:title="['顺序播放', '随机播放', '单曲循环', '列表循环'][loopMode]"
-										>
-											{{ getLoopModeIcon() }}
-										</el-button>
-									</div>
 </style>
