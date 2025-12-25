@@ -16,8 +16,8 @@ export const activities = {
         musicStrategy: 'force',
         music: [
             {
-                title: 'Sample Music 1',
-                audio: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
+                title: 'public/assets/audio/Ave Mujica-Imprisoned XII instrumental.mp3',
+                audio: '/public/assets/audio/Ave Mujica-Imprisoned XII instrumental.mp3',
                 cover: 'https://picsum.photos/200/200?random=10'
             },
             {
