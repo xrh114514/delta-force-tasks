@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "only-allow pnpm && vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "preinstall": "only-allow pnpm"
+    "preinstall": "only-allow pnpm",
+    "build:electron": "cd electron && pnpm run build",
+    "preview": "cmd.exe /D /c start /WAIT electron\\app-dist\\win-unpacked\\xrh-dfui.exe"
   },
   "dependencies": {
     "element-plus": "^2.13.0",

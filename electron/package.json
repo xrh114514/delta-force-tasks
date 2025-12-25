@@ -1,7 +1,7 @@
 {
   "name": "xrh-dfui",
   "version": "1.0.0",
-  "description": "向瑞豪的Delta Force UI with Ave Mujica",
+  "description": "向瑞豪的 Ave Mujica with Delta Force UI",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -13,8 +13,12 @@
   "packageManager": "pnpm@10.26.2",
   "devDependencies": {
     "electron": "^39.2.7",
-    "electron-builder": "^26.0.12",
+    "electron-builder": "^26.0.12"
+  },
+  "dependencies": {
     "electron-is-dev": "^3.0.1",
-    "fs-extra": "^11.3.3"
+    "finalhandler": "^2.1.1",
+    "fs-extra": "^11.3.3",
+    "serve-static": "^2.2.1"
   }
 }
