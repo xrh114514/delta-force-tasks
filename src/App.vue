@@ -24,11 +24,11 @@
             <component v-if="currentActivityComponent" :is="currentActivityComponent" :key="currentActivityId" />
           </transition>
         </div>
-
-      <!-- 音乐播放器 -->
-      <MusicPlayer ref="musicPlayer" :playlist="playlist" :current-track-index="currentTrackIndex"
-        :is-playing="isPlaying" @play-pause="togglePlayPause" @next-track="playNextTrack" @select-track="selectTrack" />
     </div>
+
+    <!-- 音乐播放器 -->
+    <MusicPlayer ref="musicPlayer" :playlist="playlist" :current-track-index="currentTrackIndex"
+      :is-playing="isPlaying" @play-pause="togglePlayPause" @next-track="playNextTrack" @select-track="selectTrack" />
   </div>
 </template>
 
@@ -165,6 +165,13 @@ const ui = {
     showVideo.value = false
     if (heroVideo.value) {
       heroVideo.value.pause()
+    }
+  },
+
+  removeClaimButton: (id) => {
+    const index = hudComponents.value.findIndex(c => c.id === `claim-btn-${id}`)
+    if (index > -1) {
+      hudComponents.value.splice(index, 1)
     }
   }
 }

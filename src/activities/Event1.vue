@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useUI } from '../composables/useUI'
 import { ElDialog, ElButton } from 'element-plus'
 
@@ -124,13 +124,32 @@ const confirmClaim = () => {
 // 初始化活动
 onMounted(() => {
     ui.showTextPanel('欢迎来到突击行动！请先选择奖励，然后点击领取按钮。', 8000)
-    ui.addClaimButton('daily1', '领取每日奖励', onClaimBtnClick)
-    ui.addClaimButton('weekly1', '领取周常奖励', onClaimBtnClick)
+    
+    // 设置全局奖励领取方法
+    window.app = {
+        claimReward: onClaimBtnClick
+    }
+})
+
+// 监听选择奖励的变化，动态显示/隐藏按钮
+watch(selectedImage, (newVal) => {
+    if (newVal) {
+        ui.addClaimButton('daily1', '领取每日奖励')
+        ui.addClaimButton('weekly1', '领取周常奖励')
+    } else {
+        ui.removeClaimButton('daily1')
+        ui.removeClaimButton('weekly1')
+    }
 })
 
 // 清理活动
 onUnmounted(() => {
     selectedImage.value = null
+    ui.removeClaimButton('daily1')
+    ui.removeClaimButton('weekly1')
+    if (window.app) {
+        delete window.app
+    }
 })
 </script>
 

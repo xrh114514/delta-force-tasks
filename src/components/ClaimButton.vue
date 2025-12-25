@@ -33,7 +33,7 @@ const buttonStyle = computed(() => {
     // 基于buttonId的hash值计算y轴偏移，确保不同按钮位置不同
     let offset = 0
     if (props.buttonId.includes('weekly')) {
-        offset = -60 // 周常奖励按钮上移60px
+        offset = -120 // 周常奖励按钮上移120px
     } else if (props.buttonId.includes('daily')) {
         offset = 0 // 每日奖励按钮保持原位
     }

@@ -76,7 +76,7 @@ defineExpose({
 
 <style scoped>
 .music-player {
-    position: absolute;
+    position: fixed;
     bottom: 20px;
     right: 20px;
     width: 300px;
