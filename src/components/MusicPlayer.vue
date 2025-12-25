@@ -4,27 +4,125 @@
             <div class="disc-cover" :class="{ playing: isPlaying }" :style="{
                 backgroundImage: currentTrack?.cover ? `url('${currentTrack.cover}')` : 'none'
             }"></div>
-            <button class="play-pause-btn" @click="$emit('play-pause')">
+            <el-button 
+                class="play-pause-btn" 
+                @click="$emit('play-pause')"
+                circle
+                type="primary"
+                plain
+                size="small"
+            >
                 {{ isPlaying ? '❚❚' : '▶' }}
-            </button>
+            </el-button>
         </div>
 
-        <div class="track-info">
-            {{ currentTrack?.title || '加载中...' }}
-        </div>
-
-        <div class="player-controls">
-            <button class="control-btn" @click="$emit('next-track')">⏭</button>
-            <button class="control-btn menu-btn" @click="toggleMenu">⋮</button>
-        </div>
-
-        <div class="track-menu" :class="{ active: showMenu }">
-            <div v-for="(track, index) in playlist" :key="index" class="menu-item" @click="selectTrack(index)">
-                {{ track.title }}
+        <div class="player-content">
+            <div class="track-info">
+                {{ currentTrack?.title || '加载中...' }}
+            </div>
+            
+            <!-- 进度条 - 使用Element Plus Slider -->
+            <div class="progress-container">
+                <span class="time-current">{{ formatTime(currentTime) }}</span>
+                <el-slider
+                    v-model="progressBar"
+                    :min="0"
+                    :max="duration"
+                    :step="0.1"
+                    @change="seekProgress"
+                    class="progress-bar"
+                    style="--el-slider-runway-background-color: rgba(255, 255, 255, 0.1);"
+                >
+                    <template #button>
+                        <div class="slider-button">
+                            <div class="slider-button-inner"></div>
+                        </div>
+                    </template>
+                </el-slider>
+                <span class="time-total">{{ formatTime(duration) }}</span>
             </div>
         </div>
 
-        <audio ref="audioElement" v-show="false"></audio>
+        <div class="player-controls">
+            <!-- 上一曲按钮 -->
+            <el-button 
+                class="control-btn" 
+                @click="$emit('prev-track')"
+                circle
+                size="small"
+            >
+                ⏮
+            </el-button>
+            
+            <!-- 音量控制 - 使用Element Plus Slider -->
+            <div class="volume-control">
+                <el-button 
+                    class="volume-icon" 
+                    @click="toggleMute"
+                    circle
+                    size="small"
+                    plain
+                >
+                    {{ isMuted ? '🔇' : volume > 70 ? '🔊' : volume > 30 ? '🔉' : '🔈' }}
+                </el-button>
+                <div class="volume-slider-container">
+                    <el-slider
+                        v-model="volume"
+                        :min="0"
+                        :max="100"
+                        :step="1"
+                        @input="updateVolume"
+                        @change="updateVolume"
+                        class="volume-slider"
+                        style="--el-slider-runway-background-color: rgba(255, 255, 255, 0.1);"
+                    />
+                </div>
+            </div>
+            
+            <el-button 
+                class="control-btn" 
+                @click="$emit('next-track')"
+                circle
+                size="small"
+            >
+                ⏭
+            </el-button>
+            
+            <!-- 循环模式按钮 -->
+            <el-button 
+                class="control-btn"
+                @click="toggleLoopMode"
+                circle
+                size="small"
+                :title="['顺序播放', '随机播放', '单曲循环', '列表循环'][loopMode]"
+            >
+                {{ getLoopModeIcon() }}
+            </el-button>
+            
+            <!-- 菜单 - 使用Element Plus Dropdown -->
+            <el-dropdown @command="selectTrack">
+                <el-button 
+                    class="menu-btn" 
+                    circle
+                    size="small"
+                >
+                    ⋮
+                </el-button>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item 
+                            v-for="(track, index) in playlist" 
+                            :key="index"
+                            :command="index"
+                        >
+                            {{ track.title }}
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
+        </div>
+
+        <audio ref="audioElement" v-show="false" @timeupdate="updateProgress" @loadedmetadata="updateDuration" @ended="handlePlayEnded"></audio>
     </div>
 </template>
 
@@ -47,22 +145,185 @@ const props = defineProps({
     }
 })
 
-const emit = defineEmits(['play-pause', 'next-track', 'select-track'])
+const emit = defineEmits(['play-pause', 'next-track', 'prev-track', 'select-track'])
 
 const showMenu = ref(false)
 const audioElement = ref(null)
+
+// 循环模式常量定义
+const LOOP_MODES = {
+    SEQUENCE: 0,      // 顺序播放
+    RANDOM: 1,        // 随机播放
+    SINGLE: 2,        // 单曲循环
+    LIST_LOOP: 3      // 列表循环
+}
+
+// 状态变量
+const currentTime = ref(0)
+const duration = ref(0)
+const volume = ref(70)
+const isMuted = ref(false)
+const lastVolume = ref(70)
+const progressBar = ref(0) // 使用单一状态变量控制进度条
+const loopMode = ref(LOOP_MODES.LIST_LOOP) // 默认列表循环
+const randomHistory = ref([]) // 随机播放历史记录
 
 const currentTrack = computed(() => {
     return props.playlist[props.currentTrackIndex] || null
 })
 
-const toggleMenu = () => {
-    showMenu.value = !showMenu.value
-}
-
 const selectTrack = (index) => {
     emit('select-track', index)
-    showMenu.value = false
+}
+
+// 更新播放进度
+const updateProgress = () => {
+    if (audioElement.value) {
+        currentTime.value = audioElement.value.currentTime
+        progressBar.value = currentTime.value
+    }
+}
+
+// 更新总时长
+const updateDuration = () => {
+    if (audioElement.value) {
+        duration.value = audioElement.value.duration || 0
+        progressBar.value = 0 // 重置进度条
+    }
+}
+
+// 格式化时间为分:秒
+const formatTime = (seconds) => {
+    if (isNaN(seconds) || seconds === 0) return '0:00'
+    
+    const mins = Math.floor(seconds / 60)
+    const secs = Math.floor(seconds % 60)
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`
+}
+
+// 切换静音状态
+const toggleMute = () => {
+    if (audioElement.value) {
+        if (isMuted.value) {
+            // 取消静音，恢复之前的音量
+            volume.value = lastVolume.value
+            audioElement.value.volume = lastVolume.value / 100
+        } else {
+            // 静音，保存当前音量
+            lastVolume.value = volume.value
+            volume.value = 0
+            audioElement.value.volume = 0
+        }
+        isMuted.value = !isMuted.value
+    }
+}
+
+// 更新音量
+const updateVolume = () => {
+    if (audioElement.value) {
+        audioElement.value.volume = volume.value / 100
+        isMuted.value = volume.value === 0
+    }
+}
+
+// 点击进度条定位播放位置
+const seekProgress = () => {
+    if (audioElement.value && duration.value > 0) {
+        const newTime = progressBar.value
+        currentTime.value = newTime
+        audioElement.value.currentTime = newTime
+    }
+}
+
+// 切换循环模式
+const toggleLoopMode = () => {
+    // 按照 SEQUENCE -> RANDOM -> SINGLE -> LIST_LOOP 的顺序循环切换
+    loopMode.value = (loopMode.value + 1) % 4
+    console.log('当前循环模式:', loopMode.value)
+}
+
+// 获取循环模式图标
+const getLoopModeIcon = () => {
+    switch (loopMode.value) {
+        case LOOP_MODES.SEQUENCE:
+            return '➡️'
+        case LOOP_MODES.RANDOM:
+            return '🔀'
+        case LOOP_MODES.SINGLE:
+            return '🔂'
+        case LOOP_MODES.LIST_LOOP:
+            return '🔁'
+        default:
+            return '🔁'
+    }
+}
+
+// 获取下一首曲目索引
+const getNextTrackIndex = () => {
+    const totalTracks = props.playlist.length
+    if (totalTracks <= 1) return 0
+    
+    switch (loopMode.value) {
+        case LOOP_MODES.RANDOM:
+            // 随机播放：生成除当前索引外的随机索引，并记录历史
+            let availableIndices = Array.from({ length: totalTracks }, (_, i) => i)
+            availableIndices = availableIndices.filter(index => index !== props.currentTrackIndex)
+            
+            // 如果只剩一首歌了，则返回当前索引
+            if (availableIndices.length === 0) return props.currentTrackIndex
+            
+            // 随机选择一个索引
+            const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)]
+            randomHistory.value.push(props.currentTrackIndex)
+            return randomIndex
+            
+        case LOOP_MODES.SINGLE:
+            // 单曲循环：始终返回当前索引
+            return props.currentTrackIndex
+            
+        case LOOP_MODES.SEQUENCE:
+            // 顺序播放：如果是最后一首，则返回-1表示结束
+            return props.currentTrackIndex === totalTracks - 1 ? -1 : props.currentTrackIndex + 1
+            
+        case LOOP_MODES.LIST_LOOP:
+        default:
+            // 列表循环：循环到第一首
+            return (props.currentTrackIndex + 1) % totalTracks
+    }
+}
+
+// 处理播放结束事件
+const handlePlayEnded = () => {
+    console.log('播放结束，当前模式:', loopMode.value, '模式名称:', ['顺序播放', '随机播放', '单曲循环', '列表循环'][loopMode.value])
+    console.log('当前曲目索引:', props.currentTrackIndex, '总曲目数:', props.playlist.length)
+    
+    // 如果是单曲循环模式，重新播放当前歌曲
+    if (loopMode.value === LOOP_MODES.SINGLE && audioElement.value) {
+        console.log('单曲循环模式：重新播放当前歌曲')
+        audioElement.value.currentTime = 0
+        if (props.isPlaying) {
+            audioElement.value.play().catch(err => {
+                console.error('重新播放失败:', err)
+            })
+        }
+        return
+    }
+    
+    // 获取下一首索引
+    const nextIndex = getNextTrackIndex()
+    console.log('计算的下一首索引:', nextIndex)
+    
+    if (nextIndex === -1) {
+        // 顺序播放模式下的最后一首播放完毕，暂停播放
+        console.log('顺序播放模式：已播放到最后一首，暂停播放')
+        emit('play-pause') // 触发暂停事件
+    } else if (nextIndex !== props.currentTrackIndex) {
+        // 切换到下一首
+        console.log(`切换到下一首：索引 ${nextIndex}`)
+        emit('select-track', nextIndex)
+    } else {
+        console.log('没有需要切换的下一首曲目')
+    }
 }
 
 const currentState = reactive({})
@@ -82,7 +343,6 @@ const play = function () {
                         emit('play-pause') // 播放成功后重置isPlaying为true
                     }).catch(() => {
                         ElMessage.error('播放失败，请检查音频文件')
-                        //此时isPlaying已经为false不需要重置
                     })
                 }
             }, { once: true })
@@ -132,6 +392,8 @@ defineExpose({
         if (currentState.url !== newState.url) {
             if (audioElement.value) {
                 audioElement.value.src = newState.url
+                // 确保音量设置正确
+                updateVolume()
                 if (newState.isPlaying) {
                     play()
                 }
@@ -139,6 +401,8 @@ defineExpose({
             else nextTick(() => {
                 if (audioElement.value) {
                     audioElement.value.src = newState.url
+                    // 确保音量设置正确
+                    updateVolume()
                 }
                 else {
                     console.error('Failed to set audio source')
@@ -162,7 +426,6 @@ defineExpose({
         currentState.currentTrack = newState.currentTrack
         currentState.trackIndex = newState.trackIndex
         currentState.url = newState.url
-
     }
 })
 </script>
@@ -172,9 +435,10 @@ defineExpose({
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 300px;
-    height: 60px;
-    padding: 8px;
+    width: 380px;
+    height: auto;
+    min-height: 100px;
+    padding: 10px 15px;
     background: rgba(26, 26, 26, 0.6);
     backdrop-filter: blur(4px);
     border: 1px solid var(--line-thin);
@@ -184,30 +448,53 @@ defineExpose({
     justify-content: space-between;
     z-index: 10;
     gap: 10px;
+    box-sizing: border-box;
+    overflow: visible;
 }
 
 @media (max-width: 768px) {
     .music-player {
-        width: 250px;
+        width: 320px;
         right: 15px;
         bottom: 15px;
+        gap: 8px;
     }
 }
 
 @media (max-width: 480px) {
     .music-player {
-        width: 200px;
+        width: calc(100% - 20px);
+        left: 10px;
         right: 10px;
         bottom: 10px;
-        padding: 6px;
-        gap: 5px;
+        padding: 8px;
+        gap: 6px;
+        flex-wrap: wrap;
+        height: auto;
+        min-height: 120px;
+    }
+    
+    .player-disc {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .player-content {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .player-controls {
+        width: 100%;
+        justify-content: center;
+        margin-top: 5px;
     }
 }
 
 .player-disc {
     position: relative;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     flex-shrink: 0;
 }
 
@@ -235,76 +522,231 @@ defineExpose({
 }
 
 .play-pause-btn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    color: var(--accent-green);
-    font-size: 18px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 35px !important;
+    height: 35px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 1 !important;
+}
+
+.player-content {
+    flex: 1;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
 }
 
 .track-info {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-sub);
-    flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    line-height: 1.2;
+}
+
+/* 进度条样式 */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text-sub);
+    width: 100%;
+}
+
+.time-current, .time-total {
+    min-width: 30px;
+    text-align: center;
+    font-family: monospace;
+    flex-shrink: 0;
+}
+
+.progress-bar {
+    flex: 1;
+    min-width: 80px;
+}
+
+/* Element Plus Slider 自定义样式 */
+:deep(.el-slider__runway) {
+    height: 4px;
+    border-radius: 2px;
+}
+
+:deep(.el-slider__bar) {
+    height: 4px;
+    background-color: var(--accent-green);
+    border-radius: 2px;
+}
+
+:deep(.el-slider:hover .el-slider__runway) {
+    height: 6px;
+}
+
+:deep(.el-slider:hover .el-slider__bar) {
+    height: 6px;
+}
+
+:deep(.el-slider__button) {
+    width: 12px !important;
+    height: 12px !important;
+    border-color: var(--accent-green) !important;
+    background-color: var(--accent-green) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+:deep(.el-slider__button:hover) {
+    transform: scale(1.2);
+    border-color: #4ade80 !important;
+    background-color: #4ade80 !important;
 }
 
 .player-controls {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    flex-shrink: 0;
 }
 
-.control-btn {
-    background: none;
-    border: none;
-    color: var(--text-sub);
-    font-size: 16px;
-    cursor: pointer;
-    transition: color var(--transition-fast);
+.control-btn, .volume-icon, .menu-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 1 !important;
 }
 
-.control-btn:hover {
-    color: var(--accent-green);
+/* 音量控制样式 */
+.volume-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.track-menu {
-    display: none;
-    position: absolute;
-    bottom: 100%;
-    right: 0;
-    background: var(--bg-secondary);
+.volume-slider-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.volume-slider {
+    width: 60px;
+    transition: width 0.2s;
+    min-width: 40px;
+}
+
+.volume-control:hover .volume-slider {
+    width: 80px;
+}
+
+/* 确保Element Plus下拉菜单可以正常显示 */
+:deep(.el-dropdown-menu) {
+    background-color: var(--bg-secondary);
     border: 1px solid var(--line-thin);
-    padding: 10px;
-    max-height: 150px;
+    padding: 5px 0;
+    max-height: 200px;
     overflow-y: auto;
-    width: 150px;
-    z-index: 20;
+    min-width: 180px;
 }
 
-.track-menu.active {
-    display: block;
-}
-
-.menu-item {
-    padding: 5px;
-    cursor: pointer;
+:deep(.el-dropdown-item) {
     color: var(--text-sub);
     font-size: 12px;
+    padding: 6px 16px;
+    transition: background-color 0.2s, color 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
-.menu-item:hover {
+:deep(.el-dropdown-item:hover) {
     color: var(--accent-green);
+    background-color: rgba(255, 255, 255, 0.05);
 }
+
+/* 滚动条样式 */
+:deep(.el-dropdown-menu::-webkit-scrollbar) {
+    width: 4px;
+}
+
+:deep(.el-dropdown-menu::-webkit-scrollbar-track) {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+}
+
+:deep(.el-dropdown-menu::-webkit-scrollbar-thumb) {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+}
+
+:deep(.el-dropdown-menu::-webkit-scrollbar-thumb:hover) {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 确保所有可点击元素都有足够的点击区域 */
+:deep(.el-button),
+:deep(.el-slider),
+:deep(.el-dropdown) {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* 确保移动端下按钮不会太小 */
+@media (max-width: 480px) {
+    :deep(.el-button--small) {
+        padding: 4px !important;
+        min-width: 32px !important;
+    }
+    
+    .volume-slider {
+        width: 50px;
+    }
+    
+    .volume-control:hover .volume-slider {
+        width: 70px;
+    }
+}
+<!-- 播放器控制按钮组 -->
+									<div class="controls">
+										<el-button 
+											class="control-btn prev-btn" 
+											@click="emit('prev-track')"
+											size="large"
+											:icon="'el-icon-back'"
+										>
+										</el-button>
+										
+										<el-button
+											class="control-btn play-btn"
+											@click="emit('play-pause')"
+											size="large"
+											:icon="isPlaying ? 'el-icon-pause' : 'el-icon-video-play'"
+										>
+										</el-button>
+										
+										<el-button
+											class="control-btn next-btn"
+											@click="emit('next-track')"
+											size="large"
+											:icon="'el-icon-right'"
+										>
+										</el-button>
+										
+										<el-button
+											class="control-btn loop-btn"
+											@click="toggleLoopMode"
+											size="large"
+											:title="['顺序播放', '随机播放', '单曲循环', '列表循环'][loopMode]"
+										>
+											{{ getLoopModeIcon() }}
+										</el-button>
+									</div>
 </style>
