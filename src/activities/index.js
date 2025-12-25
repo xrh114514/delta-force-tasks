@@ -2,7 +2,6 @@
 import Event1 from './Event1.vue'
 import Event2 from './Event2.vue'
 import Event3 from './Event3.vue'
-import Event4 from './Event4.vue'
 import { markRaw } from 'vue'
 
 // 活动配置映射表
@@ -49,16 +48,6 @@ export const activities = {
         musicStrategy: 'stop',
         component: markRaw(Event3)
     },
-    event4: {
-        id: 'event4',
-        name: '测试活动',
-        title: '测试页面',
-        desc: '用于测试各种组件的空白活动页。',
-        hero: 'https://picsum.photos/1920/1080?random=4',
-        preview: 'https://picsum.photos/300/200?random=4',
-        musicStrategy: 'keep',
-        component: markRaw(Event4)
-    }
 }
 
 // 按需获取活动配置
