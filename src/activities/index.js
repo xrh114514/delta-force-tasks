@@ -2,25 +2,25 @@ import { markRaw, defineAsyncComponent } from 'vue'
 
 // 全局音乐播放列表 - 包含所有活动的音乐
 export const globalMusicPlaylist = [
-    // Event1 - 突击行动 (Ave Mujica instrumental)
+    // Event1 - 突击行动 (Ave Mujica)
     {
-        title: 'Ave Mujica-Crucifix X instrumental',
-        audio: '/assets/audio/Ave Mujica-Crucifix X instrumental.mp3',
-        cover: '/assets/cover/Ave Mujica-Crucifix X.jpg',
+        title: 'Ave Mujica-Crucifix X',
+        audio: '/assets/1/music/Ave Mujica-Crucifix X.mp3',
+        cover: '/assets/1/music/Ave Mujica-Crucifix X.jpg',
         artist: 'Ave Mujica',
         event: '突击行动'
     },
     {
-        title: 'Ave Mujica-Imprisoned XII instrumental',
-        audio: '/assets/audio/Ave Mujica-Imprisoned XII instrumental.mp3',
-        cover: '/assets/cover/Ave Mujica-Imprisoned XII.jpg',
+        title: 'Ave Mujica-Imprisoned XII',
+        audio: '/assets/1/music/Ave Mujica-Imprisoned XII.mp3',
+        cover: '/assets/1/music/Ave Mujica-Imprisoned XII.jpg',
         artist: 'Ave Mujica',
         event: '突击行动'
     },
     {
-        title: 'Ave Mujica-天球 (そら) のMúsica instrumental',
-        audio: '/assets/audio/Ave Mujica-天球 (そら) のMúsica instrumental.mp3',
-        cover: '/assets/cover/Ave Mujica-天球 (そら) のMúsica.jpg',
+        title: 'Ave Mujica-天球 (そら) のMúsica',
+        audio: '/assets/1/music/Ave Mujica-天球 (そら) のMúsica.mp3',
+        cover: '/assets/1/music/Ave Mujica-天球 (そら) のMúsica.jpg',
         artist: 'Ave Mujica',
         event: '突击行动'
     },

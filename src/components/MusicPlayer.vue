@@ -69,24 +69,47 @@ const currentState = reactive({})
 
 const play = function () {
     if (audioElement.value) {
-        audioElement.value.play().catch(() => {
-            // autoplay failed, require user action
-            if (!currentState.shownWarning) {
-                currentState.shownWarning = true
-                ElMessage.warning('自动播放被浏览器阻止，请点击任意位置手动开始播放')
-            }
-            emit('play-pause') // 重置isPlaying为false
-            window.addEventListener('click', function onFirstClick() {
-                if (audioElement.value) {
-                    audioElement.value.play().then(() => {
-                        // emit('play-pause') // 播放成功后重置isPlaying为true
-                    }).catch((e) => {
-                        ElMessage.error('播放失败，请检查音频文件: '+e)
-                        //此时isPlaying已经为false不需要重置
-                    })
+        if (audioElement.value.readyState >= 2) { // HAVE_CURRENT_DATA or higher
+            audioElement.value.play().catch(() => {
+                // autoplay failed, require user action
+                if (!currentState.shownWarning) {
+                    currentState.shownWarning = true
+                    ElMessage.warning('自动播放被浏览器阻止，请点击任意位置手动开始播放')
                 }
-            }, { once: true })
-        })
+                emit('play-pause') // 重置isPlaying为false
+                window.addEventListener('click', function onFirstClick() {
+                    if (audioElement.value) {
+                        audioElement.value.play().then(() => {
+                            // emit('play-pause') // 播放成功后重置isPlaying为true
+                        }).catch((e) => {
+                            ElMessage.error('播放失败，请检查音频文件: '+e)
+                            //此时isPlaying已经为false不需要重置
+                        })
+                    }
+                }, { once: true })
+            })
+        } else {
+            // Wait for audio to load
+            const onCanPlay = () => {
+                audioElement.value.removeEventListener('canplay', onCanPlay)
+                audioElement.value.play().catch(() => {
+                    if (!currentState.shownWarning) {
+                        currentState.shownWarning = true
+                        ElMessage.warning('自动播放被浏览器阻止，请点击任意位置手动开始播放')
+                    }
+                    emit('play-pause')
+                    window.addEventListener('click', function onFirstClick() {
+                        if (audioElement.value) {
+                            audioElement.value.play().then(() => {
+                            }).catch((e) => {
+                                ElMessage.error('播放失败，请检查音频文件: '+e)
+                            })
+                        }
+                    }, { once: true })
+                })
+            }
+            audioElement.value.addEventListener('canplay', onCanPlay)
+        }
     }
 }
 
