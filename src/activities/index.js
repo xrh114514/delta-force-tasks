@@ -109,6 +109,51 @@ export const activities = {
         })),
         component: markRaw(defineAsyncComponent(() => import('./Event3.vue')))
     },
+    event7: {
+        id: 'event7',
+        name: '特别活动7',
+        title: '限时特别活动7',
+        desc: '神秘活动开启，奖励丰厚，先到先得！',
+        hero: 'https://picsum.photos/1920/1080?random=7',
+        preview: 'https://picsum.photos/300/200?random=7',
+        musicStrategy: 'force',
+        music: Array.from({length: 13}, (_, i) => ({
+            title: `特别活动7歌曲 ${i + 1}`,
+            audio: `/assets/audio/special7_${i + 1}.mp3`,
+            cover: `/assets/cover/special7_${i + 1}.jpg`
+        })),
+        component: markRaw(defineAsyncComponent(() => import('./Event3.vue')))
+    },
+    event8: {
+        id: 'event8',
+        name: '特别活动8',
+        title: '限时特别活动8',
+        desc: '神秘活动开启，奖励丰厚，先到先得！',
+        hero: 'https://picsum.photos/1920/1080?random=8',
+        preview: 'https://picsum.photos/300/200?random=8',
+        musicStrategy: 'force',
+        music: Array.from({length: 13}, (_, i) => ({
+            title: `特别活动8歌曲 ${i + 1}`,
+            audio: `/assets/audio/special8_${i + 1}.mp3`,
+            cover: `/assets/cover/special8_${i + 1}.jpg`
+        })),
+        component: markRaw(defineAsyncComponent(() => import('./Event3.vue')))
+    },
+    event9: {
+        id: 'event9',
+        name: '特别活动9',
+        title: '限时特别活动9',
+        desc: '神秘活动开启，奖励丰厚，先到先得！',
+        hero: 'https://picsum.photos/1920/1080?random=9',
+        preview: 'https://picsum.photos/300/200?random=9',
+        musicStrategy: 'force',
+        music: Array.from({length: 13}, (_, i) => ({
+            title: `特别活动9歌曲 ${i + 1}`,
+            audio: `/assets/audio/special9_${i + 1}.mp3`,
+            cover: `/assets/cover/special9_${i + 1}.jpg`
+        })),
+        component: markRaw(defineAsyncComponent(() => import('./Event3.vue')))
+    },
 }
 
 // 按需获取活动配置
