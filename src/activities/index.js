@@ -1,5 +1,305 @@
 import { markRaw, defineAsyncComponent } from 'vue'
 
+// 全局音乐播放列表 - 包含所有活动的音乐
+export const globalMusicPlaylist = [
+    // Event1 - 突击行动 (Ave Mujica instrumental)
+    {
+        title: 'Ave Mujica-Crucifix X instrumental',
+        audio: '/assets/audio/Ave Mujica-Crucifix X instrumental.mp3',
+        cover: '/assets/cover/Ave Mujica-Crucifix X.jpg',
+        artist: 'Ave Mujica',
+        event: '突击行动'
+    },
+    {
+        title: 'Ave Mujica-Imprisoned XII instrumental',
+        audio: '/assets/audio/Ave Mujica-Imprisoned XII instrumental.mp3',
+        cover: '/assets/cover/Ave Mujica-Imprisoned XII.jpg',
+        artist: 'Ave Mujica',
+        event: '突击行动'
+    },
+    {
+        title: 'Ave Mujica-天球 (そら) のMúsica instrumental',
+        audio: '/assets/audio/Ave Mujica-天球 (そら) のMúsica instrumental.mp3',
+        cover: '/assets/cover/Ave Mujica-天球 (そら) のMúsica.jpg',
+        artist: 'Ave Mujica',
+        event: '突击行动'
+    },
+
+    // Event3 - 孤独摇滚
+    {
+        title: 'あのバンド',
+        audio: '/assets/1/music/結束バンド-あのバンド (TV Version).mp3',
+        cover: '/assets/1/music/結束バンド-あのバンド.jpg',
+        artist: '結束バンド',
+        event: '孤独摇滚'
+    },
+    {
+        title: 'ギターと孤独と蒼い惑星',
+        audio: '/assets/1/music/結束バンド-ギターと孤独と蒼い惑星 (Anime Ver.).mp3',
+        cover: '/assets/1/music/結束バンド-ギターと孤独と蒼い惑星.jpg',
+        artist: '結束バンド',
+        event: '孤独摇滚'
+    },
+    {
+        title: '星座になれたら',
+        audio: '/assets/1/music/結束バンド-星座になれたら.mp3',
+        cover: '/assets/1/music/結束バンド-星座になれたら.jpg',
+        artist: '結束バンド',
+        event: '孤独摇滚'
+    },
+    {
+        title: '忘れてやらない',
+        audio: '/assets/1/music/結束バンド-忘れてやらない.mp3',
+        cover: '/assets/1/music/結束バンド-忘れてやらない.jpg',
+        artist: '結束バンド',
+        event: '孤独摇滚'
+    },
+    {
+        title: 'Distortion‼',
+        audio: '/assets/1/music/結束バンド-Distortion‼ (Inst.).mp3',
+        cover: '/assets/1/music/結束バンド-Distortion‼.jpg',
+        artist: '結束バンド',
+        event: '孤独摇滚'
+    },
+    {
+        title: 'なにが悪い',
+        audio: '/assets/1/music/結束バンド-なにが悪い (Inst.).mp3',
+        cover: '/assets/1/music/結束バンド-なにが悪い.jpg',
+        artist: '結束バンド',
+        event: '孤独摇滚'
+    },
+    {
+        title: 'カラカラ',
+        audio: '/assets/1/music/結束バンド-カラカラ (Inst.).mp3',
+        cover: '/assets/1/music/結束バンド-カラカラ.jpg',
+        artist: '結束バンド',
+        event: '孤独摇滚'
+    },
+    {
+        title: '結束バンド-翻转',
+        audio: '/assets/1/music/結束バンド-結束バンド-翻转 (結束バンド remix).mp3',
+        cover: '/assets/1/music/結束バンド-結束バンド-翻转.jpg',
+        artist: '結束バンド',
+        event: '孤独摇滚'
+    },
+
+    // Event4 - GIRLS BAND CRY
+    {
+        title: 'ダレモ',
+        audio: '/assets/1/music/トゲナシトゲアリ-ダレモ.mp3',
+        cover: '/assets/1/music/トゲナシトゲアリ-ダレモ.jpg',
+        artist: 'トゲナシトゲアリ',
+        event: 'GIRLS BAND CRY'
+    },
+    {
+        title: 'サヨナラサヨナラサヨナラ',
+        audio: '/assets/1/music/トゲナシトゲアリ-サヨナラサヨナラサヨナラ.mp3',
+        cover: '/assets/1/music/トゲナシトゲアリ-サヨナラサヨナラサヨナラ.jpg',
+        artist: 'トゲナシトゲアリ',
+        event: 'GIRLS BAND CRY'
+    },
+    {
+        title: 'arrow',
+        audio: '/assets/1/music/トゲナシトゲアリ-arrow.mp3',
+        cover: '/assets/1/music/トゲナシトゲアリ-arrow.jpg',
+        artist: 'トゲナシトゲアリ',
+        event: 'GIRLS BAND CRY'
+    },
+    {
+        title: 'もう何もいらない未来',
+        audio: '/assets/1/music/トゲナシトゲアリ-もう何もいらない未来.mp3',
+        cover: '/assets/1/music/トゲナシトゲアリ-もう何もいらない未来.jpg',
+        artist: 'トゲナシトゲアリ',
+        event: 'GIRLS BAND CRY'
+    },
+    {
+        title: '空白とカタルシス',
+        audio: '/assets/1/music/トゲナシトゲアリ-空白とカタルシス.mp3',
+        cover: '/assets/1/music/トゲナシトゲアリ-空白とカタルシス.jpg',
+        artist: 'トゲナシトゲアリ',
+        event: 'GIRLS BAND CRY'
+    },
+    {
+        title: '心象的フラクタル',
+        audio: '/assets/1/music/トゲナシトゲアリ-心象的フラクタル (beni-shouga).mp3',
+        cover: '/assets/1/music/トゲナシトゲアリ-心象的フラクタル.jpg',
+        artist: 'トゲナシトゲアリ',
+        event: 'GIRLS BAND CRY'
+    },
+    {
+        title: '爆ぜて咲く',
+        audio: '/assets/1/music/トゲナシトゲアリ-爆ぜて咲く.mp3',
+        cover: '/assets/1/music/トゲナシトゲアリ-爆ぜて咲く.jpg',
+        artist: 'トゲナシトゲアリ',
+        event: 'GIRLS BAND CRY'
+    },
+    {
+        title: '理想的パラドクスとは',
+        audio: '/assets/1/music/トゲナシトゲアリ-理想的パラドクスとは.mp3',
+        cover: '/assets/1/music/トゲナシトゲアリ-理想的パラドクスとは.jpg',
+        artist: 'トゲナシトゲアリ',
+        event: 'GIRLS BAND CRY'
+    },
+    {
+        title: '誰にもなれない私だから',
+        audio: '/assets/1/music/トゲナシトゲアリ-誰にもなれない私だから.mp3',
+        cover: '/assets/1/music/トゲナシトゲアリ-誰にもなれない私だから.jpg',
+        artist: 'トゲナシトゲアリ',
+        event: 'GIRLS BAND CRY'
+    },
+    {
+        title: '雑踏、僕らの街',
+        audio: '/assets/1/music/トゲナシトゲアリ-雑踏、僕らの街.mp3',
+        cover: '/assets/1/music/トゲナシトゲアリ-雑踏、僕らの街.jpg',
+        artist: 'トゲナシトゲアリ',
+        event: 'GIRLS BAND CRY'
+    },
+
+    // Event5 - MyGO!!!!!
+    {
+        title: '「僕は...」',
+        audio: '/assets/1/music/MyGO!!!!!-「僕は...」 (I am…).mp3',
+        cover: '/assets/1/music/MyGO!!!!!-「僕は...」.jpg',
+        artist: 'MyGO!!!!!',
+        event: 'MyGO!!!!!'
+    },
+    {
+        title: 'エガクミライ',
+        audio: '/assets/1/music/MyGO!!!!!-エガクミライ.mp3',
+        cover: '/assets/1/music/MyGO!!!!!-エガクミライ.jpg',
+        artist: 'MyGO!!!!!',
+        event: 'MyGO!!!!!'
+    },
+    {
+        title: '壱雫空',
+        audio: '/assets/1/music/MyGO!!!!!-壱雫空.mp3',
+        cover: '/assets/1/music/MyGO!!!!!-壱雫空.jpg',
+        artist: 'MyGO!!!!!',
+        event: 'MyGO!!!!!'
+    },
+    {
+        title: '影色舞',
+        audio: '/assets/1/music/MyGO!!!!!-影色舞.mp3',
+        cover: '/assets/1/music/MyGO!!!!!-影色舞.jpg',
+        artist: 'MyGO!!!!!',
+        event: 'MyGO!!!!!'
+    },
+    {
+        title: '迷星叫',
+        audio: '/assets/1/music/MyGO!!!!!-迷星叫.mp3',
+        cover: '/assets/1/music/MyGO!!!!!-迷星叫.jpg',
+        artist: 'MyGO!!!!!',
+        event: 'MyGO!!!!!'
+    },
+    {
+        title: '春日影',
+        audio: '/assets/1/music/MyGO!!!!!-春日影 (MyGO!!!!! ver.).mp3',
+        cover: '/assets/1/music/MyGO!!!!!-春日影.jpg',
+        artist: 'MyGO!!!!!',
+        event: 'MyGO!!!!!'
+    },
+    {
+        title: '詩超絆',
+        audio: '/assets/1/music/MyGO!!!!!-詩超絆.mp3',
+        cover: '/assets/1/music/MyGO!!!!!-詩超絆.jpg',
+        artist: 'MyGO!!!!!',
+        event: 'MyGO!!!!!'
+    },
+    {
+        title: 'Henceforth',
+        audio: '/assets/1/music/MyGO!!!!!-Henceforth.mp3',
+        cover: '/assets/1/music/MyGO!!!!!-Henceforth.jpg',
+        artist: 'MyGO!!!!!',
+        event: 'MyGO!!!!!'
+    },
+    {
+        title: '名無声',
+        audio: '/assets/1/music/MyGO!!!!!-名無声.mp3',
+        cover: '/assets/1/music/MyGO!!!!!-名無声.jpg',
+        artist: 'MyGO!!!!!',
+        event: 'MyGO!!!!!'
+    },
+    {
+        title: '回層浮',
+        audio: '/assets/1/music/MyGO!!!!!-回層浮.mp3',
+        cover: '/assets/1/music/MyGO!!!!!-回層浮.jpg',
+        artist: 'MyGO!!!!!',
+        event: 'MyGO!!!!!'
+    },
+
+    // Event6 - Ave Mujica
+    {
+        title: 'Ave Mujica',
+        audio: '/assets/1/music/Ave Mujica-Ave Mujica.mp3',
+        cover: '/assets/1/music/Ave Mujica-Ave Mujica.jpg',
+        artist: 'Ave Mujica',
+        event: 'Ave Mujica'
+    },
+    {
+        title: 'Crucifix X',
+        audio: '/assets/1/music/Ave Mujica-Crucifix X.mp3',
+        cover: '/assets/1/music/Ave Mujica-Crucifix X.jpg',
+        artist: 'Ave Mujica',
+        event: 'Ave Mujica'
+    },
+    {
+        title: 'Imprisoned XII',
+        audio: '/assets/1/music/Ave Mujica-Imprisoned XII.mp3',
+        cover: '/assets/1/music/Ave Mujica-Imprisoned XII.jpg',
+        artist: 'Ave Mujica',
+        event: 'Ave Mujica'
+    },
+    {
+        title: '天球 (そら) のMúsica',
+        audio: '/assets/1/music/Ave Mujica-天球 (そら) のMúsica.mp3',
+        cover: '/assets/1/music/Ave Mujica-天球 (そら) のMúsica.jpg',
+        artist: 'Ave Mujica',
+        event: 'Ave Mujica'
+    },
+    {
+        title: 'DIVINE',
+        audio: '/assets/1/music/Ave Mujica-DIVINE.mp3',
+        cover: '/assets/1/music/Ave Mujica-DIVINE.jpg',
+        artist: 'Ave Mujica',
+        event: 'Ave Mujica'
+    },
+    {
+        title: 'KiLLKiSS',
+        audio: '/assets/1/music/Ave Mujica-KiLLKiSS.mp3',
+        cover: '/assets/1/music/Ave Mujica-KiLLKiSS.jpg',
+        artist: 'Ave Mujica',
+        event: 'Ave Mujica'
+    },
+    {
+        title: 'Georgette Me, Georgette You',
+        audio: '/assets/1/music/Ave Mujica-Georgette Me, Georgette You.mp3',
+        cover: '/assets/1/music/Ave Mujica-Georgette Me, Georgette You.jpg',
+        artist: 'Ave Mujica',
+        event: 'Ave Mujica'
+    },
+    {
+        title: 'Ether',
+        audio: '/assets/1/music/Ave Mujica-Ether.mp3',
+        cover: '/assets/1/music/Ave Mujica-Ether.jpg',
+        artist: 'Ave Mujica',
+        event: 'Ave Mujica'
+    },
+    {
+        title: 'Choir \'S\' Choir',
+        audio: '/assets/1/music/Ave Mujica-Choir \'S\' Choir.mp3',
+        cover: '/assets/1/music/Ave Mujica-Choir \'S\' Choir.jpg',
+        artist: 'Ave Mujica',
+        event: 'Ave Mujica'
+    },
+    {
+        title: 'Angles',
+        audio: '/assets/1/music/Ave Mujica-Angles.mp3',
+        cover: '/assets/1/music/Ave Mujica-Angles.jpg',
+        artist: 'Ave Mujica',
+        event: 'Ave Mujica'
+    }
+]
+
 // 活动配置映射表
 export const activities = {
     event0: {
@@ -14,33 +314,6 @@ export const activities = {
     },
     event1: {
         id: 'event1',
-        name: '突击行动',
-        title: '突击行动 - 精英模式',
-        desc: '参与高强度突击任务，赢取限定皮肤与武器。',
-        hero: '/assets/covers/battle1.jpg',
-        preview: '/assets/covers/1724062863299.jpg',
-        musicStrategy: 'force',
-        music: [
-            {
-                title: 'Ave Mujica-Crucifix X instrumental',
-                audio: '/assets/audio/Ave Mujica-Crucifix X instrumental.mp3',
-                cover: '/assets/cover/Ave Mujica-Crucifix X.jpg'
-            },
-            {
-                title: 'Ave Mujica-Imprisoned XII instrumental',
-                audio: '/assets/audio/Ave Mujica-Imprisoned XII instrumental.mp3',
-                cover: '/assets/cover/Ave Mujica-Imprisoned XII.jpg'
-            },  
-            {
-                title: 'Ave Mujica-天球 (そら) のMúsica instrumental',
-                audio: '/assets/audio/Ave Mujica-天球 (そら) のMúsica instrumental.mp3',
-                cover: '/assets/cover/Ave Mujica-天球 (そら) のMúsica.jpg'
-            },
-        ],
-        component: markRaw(defineAsyncComponent(() => import('./Event1.vue')))
-    },
-    event2: {
-        id: 'event2',
         name: '生存挑战',
         title: '生存挑战',
         desc: '在极端环境下坚持最久，登上排行榜！',
@@ -49,110 +322,55 @@ export const activities = {
         musicStrategy: 'keep',
         component: markRaw(defineAsyncComponent(() => import('./Event2.vue')))
     },
+    event2: {
+        id: 'event2',
+        name: '突击行动',
+        title: '突击行动 - 精英模式',
+        desc: '参与高强度突击任务，赢取限定皮肤与武器。',
+        hero: '/assets/covers/battle1.jpg',
+        preview: '/assets/covers/1724062863299.jpg',
+        musicStrategy: 'global',
+        component: markRaw(defineAsyncComponent(() => import('./Event1.vue')))
+    },
     event3: {
         id: 'event3',
-        name: '特别活动',
-        title: '限时特别活动',
-        desc: '神秘活动开启，奖励丰厚，先到先得！',
-        hero: 'https://picsum.photos/1920/1080?random=3',
-        preview: 'https://picsum.photos/300/200?random=3',
-        musicStrategy: 'force',
-        music: Array.from({length: 12}, (_, i) => ({
-            title: `特别活动歌曲 ${i + 1}`,
-            audio: `/assets/audio/special${i + 1}.mp3`,
-            cover: `/assets/cover/special${i + 1}.jpg`
-        })),
+        name: '孤独摇滚',
+        title: '孤独摇滚',
+        desc: '直女爱上帅气贝斯手，发现偶像在和队友恋爱',
+        hero: '/assets/1/孤独摇滚.jpg',
+        preview: '/assets/1/孤独摇滚.jpg',
+        musicStrategy: 'global',
         component: markRaw(defineAsyncComponent(() => import('./Event3.vue')))
     },
     event4: {
         id: 'event4',
-        name: '特别活动4',
-        title: '限时特别活动4',
-        desc: '神秘活动开启，奖励丰厚，先到先得！',
-        hero: 'https://picsum.photos/1920/1080?random=4',
-        preview: 'https://picsum.photos/300/200?random=4',
-        musicStrategy: 'force',
-        music: Array.from({length: 13}, (_, i) => ({
-            title: `特别活动4歌曲 ${i + 1}`,
-            audio: `/assets/audio/special4_${i + 1}.mp3`,
-            cover: `/assets/cover/special4_${i + 1}.jpg`
-        })),
-        component: markRaw(defineAsyncComponent(() => import('./Event3.vue')))
+        name: 'GIRLS BAND CRY',
+        title: 'GIRLS BAND CRY',
+        desc: '五个日本女孩跳楼视频',
+        hero: '/assets/1/gbc.jpg',
+        preview: '/assets/1/gbc.jpg',
+        musicStrategy: 'global',
+        component: markRaw(defineAsyncComponent(() => import('./Event4.vue')))
     },
     event5: {
         id: 'event5',
-        name: '特别活动5',
-        title: '限时特别活动5',
-        desc: '神秘活动开启，奖励丰厚，先到先得！',
-        hero: 'https://picsum.photos/1920/1080?random=5',
-        preview: 'https://picsum.photos/300/200?random=5',
-        musicStrategy: 'force',
-        music: Array.from({length: 13}, (_, i) => ({
-            title: `特别活动5歌曲 ${i + 1}`,
-            audio: `/assets/audio/special5_${i + 1}.mp3`,
-            cover: `/assets/cover/special5_${i + 1}.jpg`
-        })),
-        component: markRaw(defineAsyncComponent(() => import('./Event3.vue')))
+        name: 'MyGO!!!!!',
+        title: "It's MyGO!!!!!",
+        desc: '咕咕嘎嘎——高松燈',
+        hero: '/assets/1/mygo.jpg',
+        preview: '/assets/1/mygo.jpg',
+        musicStrategy: 'global',
+        component: markRaw(defineAsyncComponent(() => import('./Event5.vue')))
     },
     event6: {
         id: 'event6',
-        name: '特别活动6',
-        title: '限时特别活动6',
-        desc: '神秘活动开启，奖励丰厚，先到先得！',
-        hero: 'https://picsum.photos/1920/1080?random=6',
-        preview: 'https://picsum.photos/300/200?random=6',
-        musicStrategy: 'force',
-        music: Array.from({length: 13}, (_, i) => ({
-            title: `特别活动6歌曲 ${i + 1}`,
-            audio: `/assets/audio/special6_${i + 1}.mp3`,
-            cover: `/assets/cover/special6_${i + 1}.jpg`
-        })),
-        component: markRaw(defineAsyncComponent(() => import('./Event3.vue')))
-    },
-    event7: {
-        id: 'event7',
-        name: '特别活动7',
-        title: '限时特别活动7',
-        desc: '神秘活动开启，奖励丰厚，先到先得！',
-        hero: 'https://picsum.photos/1920/1080?random=7',
-        preview: 'https://picsum.photos/300/200?random=7',
-        musicStrategy: 'force',
-        music: Array.from({length: 13}, (_, i) => ({
-            title: `特别活动7歌曲 ${i + 1}`,
-            audio: `/assets/audio/special7_${i + 1}.mp3`,
-            cover: `/assets/cover/special7_${i + 1}.jpg`
-        })),
-        component: markRaw(defineAsyncComponent(() => import('./Event3.vue')))
-    },
-    event8: {
-        id: 'event8',
-        name: '特别活动8',
-        title: '限时特别活动8',
-        desc: '神秘活动开启，奖励丰厚，先到先得！',
-        hero: 'https://picsum.photos/1920/1080?random=8',
-        preview: 'https://picsum.photos/300/200?random=8',
-        musicStrategy: 'force',
-        music: Array.from({length: 13}, (_, i) => ({
-            title: `特别活动8歌曲 ${i + 1}`,
-            audio: `/assets/audio/special8_${i + 1}.mp3`,
-            cover: `/assets/cover/special8_${i + 1}.jpg`
-        })),
-        component: markRaw(defineAsyncComponent(() => import('./Event3.vue')))
-    },
-    event9: {
-        id: 'event9',
-        name: '特别活动9',
-        title: '限时特别活动9',
-        desc: '神秘活动开启，奖励丰厚，先到先得！',
-        hero: 'https://picsum.photos/1920/1080?random=9',
-        preview: 'https://picsum.photos/300/200?random=9',
-        musicStrategy: 'force',
-        music: Array.from({length: 13}, (_, i) => ({
-            title: `特别活动9歌曲 ${i + 1}`,
-            audio: `/assets/audio/special9_${i + 1}.mp3`,
-            cover: `/assets/cover/special9_${i + 1}.jpg`
-        })),
-        component: markRaw(defineAsyncComponent(() => import('./Event3.vue')))
+        name: 'Ave Mujica',
+        title: 'BanG Dream! Ave Mujica',
+        desc: 'saki酱saki酱saki酱saki酱saki酱saki酱——三角初華',
+        hero: '/assets/1/mujica.jpg',
+        preview: '/assets/1/mujica.jpg',
+        musicStrategy: 'global',
+        component: markRaw(defineAsyncComponent(() => import('./Event6.vue')))
     },
 }
 

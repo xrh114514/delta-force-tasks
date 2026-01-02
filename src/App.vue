@@ -44,7 +44,8 @@ import ClaimButton from './components/ClaimButton.vue'
 import {
   activities,
   getActivityConfig,
-  getActivityComponent
+  getActivityComponent,
+  globalMusicPlaylist
 } from './activities'
 
 // 获取路由实例
@@ -189,6 +190,10 @@ const loadActivity = async (id) => {
     if (musicPlayer.value && typeof musicPlayer.value.updatePlayer === 'function') {
       musicPlayer.value.updatePlayer()
     }
+  } else if (config.musicStrategy === 'global') {
+    // 使用全局播放列表，保持当前播放状态
+    // 不改变播放列表，只显示UI信息
+    ui.showTextPanel(`切换到活动: ${config.name} - 享受精彩的音乐！`, 3000)
   } else if (config.musicStrategy === 'stop') {
     isPlaying.value = false
     if (musicPlayer.value && typeof musicPlayer.value.updatePlayer === 'function') {
@@ -230,6 +235,14 @@ const selectTrack = (index) => {
 // 初始化
 onMounted(() => {
   window.ui = ui
+  // 初始化全局音乐播放列表
+  playlist.value = globalMusicPlaylist
+  currentTrackIndex.value = 0
+  isPlaying.value = true
+  if (musicPlayer.value && typeof musicPlayer.value.updatePlayer === 'function') {
+    musicPlayer.value.updatePlayer()
+  }
+  
   if (currentActivityId.value) {
     loadActivity(currentActivityId.value)
   }

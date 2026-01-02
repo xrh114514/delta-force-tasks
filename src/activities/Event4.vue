@@ -1,6 +1,6 @@
 <template>
-    <div class="event3-container">
-        <h2>特别活动 - 视频播放中心</h2>
+    <div class="event4-container">
+        <h2>GIRLS BAND CRY - 视频播放中心</h2>
 
         <!-- 视频播放器 -->
         <div class="video-player-section">
@@ -89,87 +89,94 @@ const videoPlayer = ref(null)
 // 视频数据
 const videoList = ref([
     {
-        title: '孤独摇滚 第1集',
-        src: '/assets/1/孤独摇滚/孤独摇滚01.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第一集',
+        title: 'GIRLS BAND CRY 第1集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 01.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第一集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第2集',
-        src: '/assets/1/孤独摇滚/孤独摇滚02.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第二集',
+        title: 'GIRLS BAND CRY 第2集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 02.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第二集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第3集',
-        src: '/assets/1/孤独摇滚/孤独摇滚03.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第三集',
+        title: 'GIRLS BAND CRY 第3集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 03.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第三集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第4集',
-        src: '/assets/1/孤独摇滚/孤独摇滚04.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第四集',
+        title: 'GIRLS BAND CRY 第4集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 04.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第四集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第5集',
-        src: '/assets/1/孤独摇滚/孤独摇滚05.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第五集',
+        title: 'GIRLS BAND CRY 第5集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 05.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第五集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第6集',
-        src: '/assets/1/孤独摇滚/孤独摇滚06.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第六集',
+        title: 'GIRLS BAND CRY 第6集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 06.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第六集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第7集',
-        src: '/assets/1/孤独摇滚/孤独摇滚07.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第七集',
+        title: 'GIRLS BAND CRY 第7集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 07.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第七集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第8集',
-        src: '/assets/1/孤独摇滚/孤独摇滚08.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第八集',
+        title: 'GIRLS BAND CRY 第8集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 08.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第八集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第9集',
-        src: '/assets/1/孤独摇滚/孤独摇滚09.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第九集',
+        title: 'GIRLS BAND CRY 第9集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 09.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第九集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第10集',
-        src: '/assets/1/孤独摇滚/孤独摇滚10.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第十集',
+        title: 'GIRLS BAND CRY 第10集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 10.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第十集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第11集',
-        src: '/assets/1/孤独摇滚/孤独摇滚11.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第十一集',
+        title: 'GIRLS BAND CRY 第11集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 11.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第十一集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第12集',
-        src: '/assets/1/孤独摇滚/孤独摇滚12.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第十二集',
+        title: 'GIRLS BAND CRY 第12集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 12.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第十二集',
+        duration: '24:00'
+    },
+    {
+        title: 'GIRLS BAND CRY 第13集',
+        src: '/assets/1/GIRLS BAND CRY/GIRLS BAND CRY 13.mp4',
+        thumbnail: '/assets/1/gbc.jpg',
+        description: 'GIRLS BAND CRY第十三集',
         duration: '24:00'
     }
 ])
@@ -273,7 +280,7 @@ const formatTime = (seconds) => {
 
 // 初始化活动
 onMounted(() => {
-    ui.showTextPanel('欢迎来到视频播放中心！选择视频开始观看精彩内容。', 5000)
+    ui.showTextPanel('欢迎来到GIRLS BAND CRY视频播放中心！选择视频开始观看精彩内容。', 5000)
 })
 
 // 清理活动
@@ -285,14 +292,14 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.event3-container {
+.event4-container {
     padding: 20px;
     color: white;
     max-width: 1000px;
     margin: 0 auto;
 }
 
-.event3-container h2 {
+.event4-container h2 {
     color: #00d4aa;
     margin-bottom: 30px;
     text-align: center;

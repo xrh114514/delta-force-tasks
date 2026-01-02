@@ -5,13 +5,19 @@
         <div class="image-gallery">
             <h3>奖励预览图片</h3>
             <div class="image-grid">
-                <img v-for="(image, index) in rewardImages"
+                <div v-for="(image, index) in rewardImages"
                      :key="index"
-                     :src="image.src"
-                     :alt="image.alt"
-                     @click="selectImage(image)"
-                     :class="{ selected: selectedImage?.src === image.src }"
-                     class="reward-image" />
+                     class="reward-image-wrapper"
+                     :class="{ claimed: image.claimed }">
+                    <img :src="image.src"
+                         :alt="image.alt"
+                         @click="image.claimed ? null : selectImage(image)"
+                         :class="{ selected: selectedImage?.src === image.src, claimed: image.claimed }"
+                         class="reward-image" />
+                    <div v-if="image.claimed" class="claimed-overlay">
+                        <span>已领取</span>
+                    </div>
+                </div>
             </div>
             <p v-if="selectedImage" class="selected-info">
                 已选择: {{ selectedImage.alt }}
@@ -25,7 +31,7 @@
             </div>
             <div class="stat-item">
                 <span class="stat-label">总奖励数:</span>
-                <span class="stat-value">{{ rewardImages.length }}</span>
+                <span class="stat-value">{{ totalRewards }}</span>
             </div>
         </div>
         <el-dialog v-model="showClaimDialog" title="领取奖励确认" width="350px" :close-on-click-modal="false">
@@ -45,40 +51,31 @@ import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useUI } from '../composables/useUI'
 // 移除显式导入的ElementPlus组件
 
-// 导入奖励图片 (使用占位符)
-const goldWeaponImg = 'https://picsum.photos/200/200?random=1'
-const epicCharacterImg = 'https://picsum.photos/200/200?random=2'
-const rareHangerImg = 'https://picsum.photos/200/200?random=3'
-const expCardImg = 'https://picsum.photos/200/200?random=4'
+// 导入奖励图片
+const boxImg = '/assets/1/盒.png'
+const xlfImg = '/assets/1/xlf.jpg'
 
 const ui = useUI()
 
 // 奖励图片数据
 const rewardImages = ref([
     {
-        src: goldWeaponImg,
-        alt: '黄金武器皮肤',
-        rarity: 'legendary'
+        src: boxImg,
+        alt: '神秘宝盒',
+        rarity: 'legendary',
+        claimed: false
     },
     {
-        src: epicCharacterImg,
-        alt: '稀有角色皮肤',
-        rarity: 'epic'
-    },
-    {
-        src: rareHangerImg,
-        alt: '精美挂件',
-        rarity: 'rare'
-    },
-    {
-        src: expCardImg,
-        alt: '经验加成卡',
-        rarity: 'common'
+        src: xlfImg,
+        alt: '稀有限定皮肤',
+        rarity: 'epic',
+        claimed: false
     }
 ])
 
 const selectedImage = ref(null)
 const claimedRewards = ref([])
+const totalRewards = ref(2) // 固定总奖励数
 
 const showClaimDialog = ref(false)
 const pendingRewardId = ref(null)
@@ -86,6 +83,10 @@ const isConfirmed = ref(false)
 
 // 选择图片
 const selectImage = (image) => {
+    if (image.claimed) {
+        ui.showTextPanel('该奖励已被领取！', 3000)
+        return
+    }
     selectedImage.value = image
     ui.showTextPanel(`已选择奖励: ${image.alt}`, 3000)
 }
@@ -93,12 +94,15 @@ const selectImage = (image) => {
 // 领取奖励
 const claimReward = (rewardId) => {
     if (selectedImage.value) {
+        // 标记奖励为已领取
+        selectedImage.value.claimed = true
+        
         claimedRewards.value.push({
             id: rewardId,
             image: selectedImage.value,
             timestamp: new Date()
         })
-        rewardImages.value.splice(rewardImages.value.indexOf(selectedImage.value), 1)
+        
         ui.showTextPanel(`🎉 成功领取奖励: ${selectedImage.value.alt}!`, 5000)
         selectedImage.value = null
         // 保存到localStorage
@@ -138,26 +142,16 @@ const confirmClaim = () => {
 onMounted(() => {
     ui.showTextPanel('欢迎来到突击行动！请先选择奖励，然后点击领取按钮。', 8000)
     
-    // 检查是否需要重置奖励（每天0点）
-    const today = new Date().toDateString()
-    const lastResetDate = localStorage.getItem('Event1_lastResetDate')
-    if (lastResetDate !== today) {
-        // 重置奖励
-        claimedRewards.value = []
-        localStorage.setItem('Event1_lastResetDate', today)
-        localStorage.removeItem('Event1_claimedRewards')
-    } else {
-        // 加载已领取奖励
-        const stored = localStorage.getItem('Event1_claimedRewards')
-        if (stored) {
-            claimedRewards.value = JSON.parse(stored)
-            // 从奖励列表中移除已领取的
-            claimedRewards.value.forEach(claimed => {
-                const index = rewardImages.value.findIndex(img => img.src === claimed.image.src)
-                if (index !== -1) rewardImages.value.splice(index, 1)
-            })
-        }
-    }
+    // 强制重置奖励数据（由于奖励系统更新）
+    claimedRewards.value = []
+    localStorage.removeItem('Event1_claimedRewards')
+    localStorage.removeItem('Event1_lastClaimTime')
+    localStorage.setItem('Event1_lastResetDate', new Date().toDateString())
+    
+    // 确保所有奖励都标记为未领取
+    rewardImages.value.forEach(image => {
+        image.claimed = false
+    })
     
     // 设置全局奖励领取方法
     window.app = {
@@ -210,6 +204,16 @@ onUnmounted(() => {
     margin-bottom: 20px;
 }
 
+.reward-image-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.reward-image-wrapper.claimed {
+    opacity: 0.6;
+}
+
 .reward-image {
     width: 100%;
     height: 150px;
@@ -220,7 +224,12 @@ onUnmounted(() => {
     border: 3px solid transparent;
 }
 
-.reward-image:hover {
+.reward-image.claimed {
+    cursor: not-allowed;
+    filter: grayscale(100%);
+}
+
+.reward-image:hover:not(.claimed) {
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(0, 212, 170, 0.3);
 }
@@ -228,6 +237,28 @@ onUnmounted(() => {
 .reward-image.selected {
     border-color: #00d4aa;
     box-shadow: 0 0 15px rgba(0, 212, 170, 0.5);
+}
+
+.claimed-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.claimed-overlay span {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    background: rgba(0, 212, 170, 0.8);
+    padding: 8px 16px;
+    border-radius: 4px;
 }
 
 .selected-info {

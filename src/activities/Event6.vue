@@ -1,6 +1,6 @@
 <template>
-    <div class="event3-container">
-        <h2>特别活动 - 视频播放中心</h2>
+    <div class="event6-container">
+        <h2>BanG Dream! Ave Mujica - 视频播放中心</h2>
 
         <!-- 视频播放器 -->
         <div class="video-player-section">
@@ -89,87 +89,94 @@ const videoPlayer = ref(null)
 // 视频数据
 const videoList = ref([
     {
-        title: '孤独摇滚 第1集',
-        src: '/assets/1/孤独摇滚/孤独摇滚01.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第一集',
+        title: 'BanG Dream! Ave Mujica 第1集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 01.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第一集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第2集',
-        src: '/assets/1/孤独摇滚/孤独摇滚02.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第二集',
+        title: 'BanG Dream! Ave Mujica 第2集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 02.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第二集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第3集',
-        src: '/assets/1/孤独摇滚/孤独摇滚03.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第三集',
+        title: 'BanG Dream! Ave Mujica 第3集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 03.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第三集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第4集',
-        src: '/assets/1/孤独摇滚/孤独摇滚04.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第四集',
+        title: 'BanG Dream! Ave Mujica 第4集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 04.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第四集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第5集',
-        src: '/assets/1/孤独摇滚/孤独摇滚05.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第五集',
+        title: 'BanG Dream! Ave Mujica 第5集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 05.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第五集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第6集',
-        src: '/assets/1/孤独摇滚/孤独摇滚06.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第六集',
+        title: 'BanG Dream! Ave Mujica 第6集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 06.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第六集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第7集',
-        src: '/assets/1/孤独摇滚/孤独摇滚07.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第七集',
+        title: 'BanG Dream! Ave Mujica 第7集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 07.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第七集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第8集',
-        src: '/assets/1/孤独摇滚/孤独摇滚08.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第八集',
+        title: 'BanG Dream! Ave Mujica 第8集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 08.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第八集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第9集',
-        src: '/assets/1/孤独摇滚/孤独摇滚09.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第九集',
+        title: 'BanG Dream! Ave Mujica 第9集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 09.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第九集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第10集',
-        src: '/assets/1/孤独摇滚/孤独摇滚10.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第十集',
+        title: 'BanG Dream! Ave Mujica 第10集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 10.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第十集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第11集',
-        src: '/assets/1/孤独摇滚/孤独摇滚11.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第十一集',
+        title: 'BanG Dream! Ave Mujica 第11集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 11.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第十一集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第12集',
-        src: '/assets/1/孤独摇滚/孤独摇滚12.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第十二集',
+        title: 'BanG Dream! Ave Mujica 第12集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 12.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第十二集',
+        duration: '24:00'
+    },
+    {
+        title: 'BanG Dream! Ave Mujica 第13集',
+        src: '/assets/1/Ave Mujica/BanG Dream! Ave Mujica 13.mp4',
+        thumbnail: '/assets/1/mujica.jpg',
+        description: 'BanG Dream! Ave Mujica第十三集',
         duration: '24:00'
     }
 ])
@@ -273,7 +280,7 @@ const formatTime = (seconds) => {
 
 // 初始化活动
 onMounted(() => {
-    ui.showTextPanel('欢迎来到视频播放中心！选择视频开始观看精彩内容。', 5000)
+    ui.showTextPanel('欢迎来到BanG Dream! Ave Mujica视频播放中心！选择视频开始观看精彩内容。', 5000)
 })
 
 // 清理活动
@@ -285,21 +292,25 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.event3-container {
-    padding: 20px;
-    color: white;
-    max-width: 1000px;
+.event6-container {
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 20px;
+    color: #fff;
+    font-family: 'Arial', sans-serif;
 }
 
-.event3-container h2 {
-    color: #00d4aa;
-    margin-bottom: 30px;
+.event6-container h2 {
     text-align: center;
+    margin-bottom: 30px;
+    color: #ff6b6b;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+/* 视频播放器区域 */
 .video-player-section {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .video-wrapper {
@@ -307,7 +318,7 @@ onUnmounted(() => {
     width: 100%;
     max-width: 800px;
     margin: 0 auto 20px;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
@@ -315,7 +326,6 @@ onUnmounted(() => {
 .main-video {
     width: 100%;
     height: auto;
-    max-height: 80vh;
     display: block;
     background: #000;
 }
@@ -326,7 +336,7 @@ onUnmounted(() => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -335,60 +345,76 @@ onUnmounted(() => {
 }
 
 .video-overlay:hover {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.3);
 }
 
 .play-button {
     width: 80px;
     height: 80px;
-    background: rgba(0, 212, 170, 0.9);
     border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    color: white;
     transition: all 0.3s ease;
 }
 
 .play-button:hover {
-    background: rgba(0, 212, 170, 1);
     transform: scale(1.1);
+    background: rgba(255, 255, 255, 1);
+}
+
+.play-button span {
+    font-size: 24px;
+    color: #333;
+    margin-left: 3px;
 }
 
 .video-info {
     text-align: center;
+    margin-bottom: 20px;
 }
 
 .video-info h3 {
-    color: #e5e5e5;
-    margin-bottom: 10px;
-    font-size: 20px;
+    margin: 0 0 10px 0;
+    color: #4ecdc4;
+    font-size: 1.5em;
 }
 
 .video-stats {
     display: flex;
     justify-content: center;
     gap: 20px;
-    color: #888;
-    font-size: 14px;
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+/* 播放列表 */
+.video-playlist {
+    margin-bottom: 30px;
 }
 
 .video-playlist h3 {
-    color: #e5e5e5;
+    text-align: center;
     margin-bottom: 20px;
-    font-size: 18px;
+    color: #ffe66d;
+    font-size: 1.8em;
 }
 
 .playlist {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
-    margin-bottom: 30px;
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
 }
 
 .playlist-item {
-    background: rgba(26, 26, 26, 0.6);
+    display: flex;
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     overflow: hidden;
     cursor: pointer;
@@ -397,20 +423,21 @@ onUnmounted(() => {
 }
 
 .playlist-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .playlist-item.active {
-    border-color: #00d4aa;
-    background: rgba(0, 212, 170, 0.1);
+    border-color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.2);
 }
 
 .video-thumbnail {
     position: relative;
-    width: 100%;
-    height: 150px;
-    overflow: hidden;
+    width: 120px;
+    height: 80px;
+    flex-shrink: 0;
 }
 
 .video-thumbnail img {
@@ -425,7 +452,7 @@ onUnmounted(() => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -437,29 +464,39 @@ onUnmounted(() => {
     opacity: 1;
 }
 
+.play-overlay span {
+    font-size: 18px;
+    color: white;
+}
+
 .video-details {
-    padding: 15px;
+    padding: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .video-details h4 {
-    color: #e5e5e5;
-    margin: 0 0 8px 0;
-    font-size: 16px;
+    margin: 0 0 5px 0;
+    font-size: 1em;
+    color: #fff;
 }
 
 .video-details p {
-    color: #888;
-    margin: 0 0 8px 0;
-    font-size: 14px;
-    line-height: 1.4;
+    margin: 0 0 5px 0;
+    font-size: 0.8em;
+    color: #ccc;
+    line-height: 1.3;
 }
 
 .duration {
-    color: #00d4aa;
-    font-size: 12px;
-    font-weight: bold;
+    font-size: 0.7em;
+    color: #999;
+    align-self: flex-end;
 }
 
+/* 播放控制 */
 .playback-controls {
     display: flex;
     justify-content: center;
@@ -469,40 +506,55 @@ onUnmounted(() => {
 
 .control-btn {
     padding: 12px 24px;
-    background: rgba(26, 26, 26, 0.8);
-    border: 2px solid #00d4aa;
-    color: #00d4aa;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
     cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .control-btn:hover:not(:disabled) {
-    background: #00d4aa;
-    color: white;
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .control-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    transform: none;
 }
 
 .play-pause-btn {
-    background: #00d4aa;
-    color: white;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    padding: 15px 30px;
+    font-size: 1.1em;
 }
 
-.play-pause-btn:hover:not(:disabled) {
-    background: #00b894;
-}
-
+/* 响应式设计 */
 @media (max-width: 768px) {
+    .event6-container {
+        padding: 15px;
+    }
+
+    .event6-container h2 {
+        font-size: 2em;
+    }
+
+    .video-wrapper {
+        max-width: 100%;
+    }
+
     .playlist {
         grid-template-columns: 1fr;
+        max-height: 400px;
+    }
+
+    .video-thumbnail {
+        width: 100px;
+        height: 70px;
     }
 
     .playback-controls {
@@ -512,6 +564,30 @@ onUnmounted(() => {
 
     .control-btn {
         width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .event6-container h2 {
+        font-size: 1.5em;
+    }
+
+    .video-stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .playlist-item {
+        flex-direction: column;
+    }
+
+    .video-thumbnail {
+        width: 100%;
+        height: 120px;
+    }
+
+    .video-details {
+        padding: 8px;
     }
 }
 </style>

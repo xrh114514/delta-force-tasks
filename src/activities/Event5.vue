@@ -1,6 +1,6 @@
 <template>
-    <div class="event3-container">
-        <h2>特别活动 - 视频播放中心</h2>
+    <div class="event5-container">
+        <h2>It's MyGO!!!! - 视频播放中心</h2>
 
         <!-- 视频播放器 -->
         <div class="video-player-section">
@@ -89,87 +89,94 @@ const videoPlayer = ref(null)
 // 视频数据
 const videoList = ref([
     {
-        title: '孤独摇滚 第1集',
-        src: '/assets/1/孤独摇滚/孤独摇滚01.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第一集',
+        title: 'BanG Dream! Its MyGO!!!!! 第1集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 01.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第一集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第2集',
-        src: '/assets/1/孤独摇滚/孤独摇滚02.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第二集',
+        title: 'BanG Dream! Its MyGO!!!!! 第2集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 02.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第二集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第3集',
-        src: '/assets/1/孤独摇滚/孤独摇滚03.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第三集',
+        title: 'BanG Dream! Its MyGO!!!!! 第3集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 03.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第三集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第4集',
-        src: '/assets/1/孤独摇滚/孤独摇滚04.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第四集',
+        title: 'BanG Dream! Its MyGO!!!!! 第4集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 04.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第四集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第5集',
-        src: '/assets/1/孤独摇滚/孤独摇滚05.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第五集',
+        title: 'BanG Dream! Its MyGO!!!!! 第5集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 05.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第五集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第6集',
-        src: '/assets/1/孤独摇滚/孤独摇滚06.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第六集',
+        title: 'BanG Dream! Its MyGO!!!!! 第6集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 06.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第六集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第7集',
-        src: '/assets/1/孤独摇滚/孤独摇滚07.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第七集',
+        title: 'BanG Dream! Its MyGO!!!!! 第7集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 07.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第七集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第8集',
-        src: '/assets/1/孤独摇滚/孤独摇滚08.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第八集',
+        title: 'BanG Dream! Its MyGO!!!!! 第8集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 08.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第八集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第9集',
-        src: '/assets/1/孤独摇滚/孤独摇滚09.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第九集',
+        title: 'BanG Dream! Its MyGO!!!!! 第9集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 09.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第九集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第10集',
-        src: '/assets/1/孤独摇滚/孤独摇滚10.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第十集',
+        title: 'BanG Dream! Its MyGO!!!!! 第10集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 10.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第十集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第11集',
-        src: '/assets/1/孤独摇滚/孤独摇滚11.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第十一集',
+        title: 'BanG Dream! Its MyGO!!!!! 第11集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 11.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第十一集',
         duration: '24:00'
     },
     {
-        title: '孤独摇滚 第12集',
-        src: '/assets/1/孤独摇滚/孤独摇滚12.mp4',
-        thumbnail: '/assets/1/孤独摇滚.jpg',
-        description: '孤独摇滚第十二集',
+        title: 'BanG Dream! Its MyGO!!!!! 第12集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 12.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第十二集',
+        duration: '24:00'
+    },
+    {
+        title: 'BanG Dream! Its MyGO!!!!! 第13集',
+        src: '/assets/1/It\'s myGO/BanG Dream! Its MyGO!!!!! 13.mp4',
+        thumbnail: '/assets/1/mygo.jpg',
+        description: 'BanG Dream! Its MyGO!!!!!第十三集',
         duration: '24:00'
     }
 ])
@@ -273,7 +280,7 @@ const formatTime = (seconds) => {
 
 // 初始化活动
 onMounted(() => {
-    ui.showTextPanel('欢迎来到视频播放中心！选择视频开始观看精彩内容。', 5000)
+    ui.showTextPanel('欢迎来到It\'s MyGO!!!!!视频播放中心！选择视频开始观看精彩内容。', 5000)
 })
 
 // 清理活动
@@ -285,14 +292,14 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.event3-container {
+.event5-container {
     padding: 20px;
     color: white;
     max-width: 1000px;
     margin: 0 auto;
 }
 
-.event3-container h2 {
+.event5-container h2 {
     color: #00d4aa;
     margin-bottom: 30px;
     text-align: center;
